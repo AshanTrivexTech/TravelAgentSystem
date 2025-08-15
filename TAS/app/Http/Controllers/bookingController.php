@@ -2650,17 +2650,28 @@ $tourQoutGuide_gp =$tourQoutGuide->groupBy('tour_day');
 
     public  function  download_quotation($id)
     {
-        $quotation = DB::table('tour_quotation_headers')
+        $quotation =(array) DB::table('tour_quotation_headers')
         ->join('agents', 'agents.id', '=', 'tour_quotation_headers.agent_id')
         ->where('tour_quotation_headers.id', $id)
         ->first();
+
+        $adult_price=$quotation['pp_hotel_price']*$quotation['pax_adult'];
+        $child_price=$quotation['pp_hotel_price']*$quotation['pax_child'];
+
+        $trp_pp_price=$quotation['trp_pp_price']*$quotation['millage'];
+
+        $total=$adult_price+$child_price+$trp_pp_price;
+
 
     if (!$quotation) {
         abort(404, 'Quotation not found.');
     }
 
     // Convert object to array to pass to the view
-    $data = ['quotation' => (array) $quotation];
+    $data = ['quotation' => (array) $quotation,'adult_price'=>$adult_price,'child_price'=>$child_price,
+    'trp_pp_price' =>$trp_pp_price,
+        'total'=>$total
+        ];
 
     // Load the Blade view and pass data
     $pdf = PDF::loadView('booking_section.confirm.TourQuatationPdf', $data);
