@@ -46,7 +46,7 @@ Route::get('/hoteltype/list','hotelTypeController@listIndex')->name('hotel_type_
 
 Route::get('/countries/{e}/index','exceptionController@index')->name('exception_load');
 
-//hotel features 
+//hotel features
 Route::get('/hotel/features/create','hotel_featureController@create')->name('load_hotel_features');
 Route::post('hotel/feature/store','hotel_featureController@store')->name('store_features');
 //Route::get('/hotel/features/index','hotel_featureController@index')->name('index_hotel_feature');
@@ -275,7 +275,7 @@ Route::post('/guide/languagerate/update','guideLanuageRateController@update')->n
 
 //view lanuages
 Route::get('/guide/view/{id}/languages','guideLanguageController@index')->name('load_guid_lanuages');
-Route::get('/guide/view/{id}/add','guideLanguageController@create')->name('guid_lanuages_add');  
+Route::get('/guide/view/{id}/add','guideLanguageController@create')->name('guid_lanuages_add');
 Route::post('/guide/view/store','guideLanguageController@store')->name('guid_lanuages_store');
 Route::post('/guide/view/delete','guideLanguageController@destroy')->name('guid_lanuages_delete');
 
@@ -412,7 +412,7 @@ Route::post('/tour/booking/reservation/guest/store','bookingController@save_gues
 Route::get('/tour/booking/resrevation/guest/allocation/{id}/index','bookingController@tour_booking_guest_allocate_index')->name('booking_guest_allocate_index_load');
 Route::post('/tour/booking/reservation/guest/allocation/delete','bookingController@guests_allocation_delete_records')->name('guest_allocation_delete');
 Route::post('/tour/booking/reservation/guest/allocation/livesearch','bookingController@guests_allocation_livesearch')->name('lv_srch');
-//Booking Section Vouchers 
+//Booking Section Vouchers
 
 Route::get('/tour/booking/reservation/view/accommodation/voucher/{id}','bookingController@accmd_reserve_voucher')->name('reservation_voucher_accmd');
 Route::get('/tour/booking/reservation/view/misc/voucher','bookingController@misc_reserve_voucher')->name('reservation_voucher_misc');
@@ -455,7 +455,7 @@ Route::get('/itineray/{id}/edit','itinerayController@edit')->name('itineray_edit
 Route::post('/itineray/update','itinerayController@update')->name('itineray_update');
 Route::post('/itineray/delete','itinerayController@destroy')->name('itineray_delete');
 Route::post('/itineray/liveSearch','itinerayController@liveSearch')->name('itineray_liveSearch');
- 
+
 //------------Tax--------------
 
 Route::get('/tax/create','taxController@create')->name('tax_create');
@@ -484,31 +484,31 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/print',function(){
 
-    return view('print');   
+    return view('print');
 
 });
 
 Route::get('/booking/transport',function(){
 
-    return view('tour_section_bookings.components.transport_view');   
+    return view('tour_section_bookings.components.transport_view');
 
 });
- 
- 
+
+
     Route::get('/aaa','userController@assign_privilages');
-        
+
 
 
     Route::get('/dashboard/metro',function(){
 
-        return view('dashboard.metro');   
-    
+        return view('dashboard.metro');
+
     });
 
     Route::get('/print/tadvanced',function(){
 
-        return view('tour_section_bookings.print_doc.tour_advanced');   
-    
+        return view('tour_section_bookings.print_doc.tour_advanced');
+
     });
 
     Route::get('/tour/booking/reservation/voucher/rooming/list','bookingController@rooming_list_voucher')->name('rooming_list_voucher');
@@ -517,7 +517,7 @@ Route::get('/booking/transport',function(){
 
 Route::get('/tour/transport/index','transportController@index')->name('tourtransport_load');
 Route::post('/tour/transport/livesearch','transportController@liveSearch')->name('tourtransport_livesearch');
-Route::get('/tour/transport/vehicle/{id}/type','transportController@view_vehicle_types')->name('load_vehicletypes');      
+Route::get('/tour/transport/vehicle/{id}/type','transportController@view_vehicle_types')->name('load_vehicletypes');
 Route::get('tour/transport/{id}/view','transportController@load_view_transport')->name('load_tour_trns_view');
 
 //Transport reservation
@@ -540,12 +540,12 @@ Route::get('/opmd/dashboard','dashboardController@opmd_dashboard')->name('opmd_d
 Route::get('/opertation/dashboard','dashboardController@op_dashboard')->name('operation_dashboard');
 
 Route::get('/booking/dashboard',function(){
-    
+
     return view('booking_dashboard');
 })->name('booking_dashboard');
 
 // Route::get('/grid/dashboard',function(){
-    
+
 //     return view('grid_dashboard');
 // })->name('grid_dashboard');
 
@@ -570,13 +570,13 @@ Route::post('/feedback/store','feedbackController@store')->name('store_feedback'
 Route::get('/feedback/view','feedbackController@fdb_view')->name('view_feedback');
 
 // Route::get('/quick/quote/contracts',function(){
-    
+
 //     return view('tour_section.quick_quote.create_Contract');
 // })->name('create_Contracts');
 
 
 // Route::get('/report/Page',function(){
-    
+
 //     return view('exception_return.report_page');
 // })->name('404Page');
 
@@ -587,13 +587,16 @@ Route::post('/report/save/page','exceptionreturnController@store')->name('save_e
 Route::get('/report/404/error','exceptionreturnController@view_404page')->name('404report_page');
 
 // Route::get('/booking/invoice',function(){
-    
+
 //     return view('invoice');
 // })->name('booking_invoice');
 
 Route::get('/grid/dashboard','bookingController@invoice_gen')->name('grid_dashboard');
 
 Route::get('/create/institute',function(){
-    
+
     return view('create_institute');
 })->name('create_institute');
+
+Route::get('/booking/section/confirm/manage','bookingController@manage_confirm')->name('manage_confirm');
+Route::get('/booking/download/quotation/{id}','bookingController@download_quotation')->name('download_quotation');

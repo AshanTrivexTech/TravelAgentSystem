@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\TourQuotationHeader;
 use Illuminate\Support\Facades\Auth;
-use DB;
 use Exception;
 use App\AccmdReservation;
 use App\TourQoutHotelComSupliment;
@@ -17,7 +16,7 @@ use App\ReservationMisc;
 use App\AccmdResevationVoucherHeader;
 use App\TrData;
 use App\AccmdResevationVoucherDetails;
-use PDF;
+use Illuminate\Support\Facades\DB;
 use App\MiscReserveVoucherHeader;
 use App\MiscReserveVoucherDetail;
 use App\TransportReserve;
@@ -42,23 +41,25 @@ use App\TourType;
 use App\TourQuotMisc;
 use App\GuideType;
 use App\Language;
+use Spatie\Browsershot\Browsershot;
+use PDF;
 
 
 class bookingController extends companyController
 {
     //
-   
+
     private $page_postion;
     private $tb_pos;
 
 
-  
+
     public function __construct()
     {
         $this->middleware('auth');
-              
-       
-        // 
+
+
+        //
         $this->page_postion=1;
 
     }
@@ -67,91 +68,91 @@ class bookingController extends companyController
     {
            try{
 
-            return view('tour_section_bookings.list.index');       
+            return view('tour_section_bookings.list.index');
 
            }catch(\Exception $e){
-               
-                return abort(404); 
+
+                return abort(404);
            }
-        
+
     }
 
     public function dashboard_index($t_id)
     {
-          
+
         try{
-                
+
 
                 $t_header_data=TourQuotationHeader::where('tour_id',$t_id)->first();
                 // return $t_header_data;
-        
+
                 $noofguestadded = GuestAllocation::where('tour_id',$t_id)->count();
-                
+
                 $noofHotels_lst = TourQuotationHotelDetails::where('tour_id',$t_id)->where('status',1)->select('supplier_id')->get();
                 $noofHotels_lst_gp =  $noofHotels_lst->groupBy('supplier_id');
                 $noofHotels = collect($noofHotels_lst_gp)->count();
-                
+
                 $noofGuides_lst = DB::table('tour_quot_guide_details')
                                     ->join('guide_allocations','guide_allocations.tour_quot_guide_detail_id','=','tour_quot_guide_details.id')
                                     ->where('tour_quot_guide_details.tour_id',$t_id)->where('guide_allocations.status',2)->select('guide_allocations.supplier_id')->get();
                 $noofGuides_lst_gp =  $noofGuides_lst->groupBy('supplier_id');
 
                 $noofGuides = collect($noofGuides_lst_gp)->count();
-                
+
                 $noofVehicles = DB::table('tour_quot_transports')
                                 ->join('transport_reserves','transport_reserves.tour_quot_transport_id','=','tour_quot_transports.id')
                                 ->where('tour_quot_transports.tour_id',$t_id)
                                 ->where('transport_reserves.status',1)
                                 ->count();
-                
+
                 $DistanceDtList = DB::table('tour_quot_locations')
                                 ->join('tour_quot_distances','tour_quot_distances.tour_quot_location_id','=','tour_quot_locations.id')
                                 ->select('tour_quot_distances.*','tour_quot_locations.tour_day','tour_quot_locations.ttkms')
                                 ->orderBy('tour_quot_distances.pos')
                                 ->where('tour_quot_locations.tour_id',$t_id)
                                 ->get();
-    
+
             $LocationDtList_gp = $DistanceDtList->groupBy('tour_day');
             // return $noofGuides;
-            
+
             return view('tour_section_bookings.dashboard.index',compact('t_header_data','noofguestadded','noofHotels','noofGuides',
-                         'noofVehicles','LocationDtList_gp'));               
+                         'noofVehicles','LocationDtList_gp'));
 
           }catch(\Exception $e){
-              
+
                return 'sasdad'.$e;
           }
-        
-    
+
+
     }
 
     public function amalgamate_create($id){
-          
+
          try{
 
-            $currency_list = Currency::all();  
+            $currency_list = Currency::all();
             $maket_list = Market::all();
             $branch_list =Branch::all();
             $tourType = TourType::all();
             $agents = Agent::all();
-    
+
             $amalgamate = 1;
-    
-            $tour_quote_data = TourQuotationHeader::where('tour_id',$id)->first();        
+
+            $tour_quote_data = TourQuotationHeader::where('tour_id',$id)->first();
             return view('tour_section_bookings.amalgamate.create',compact('currency_list','maket_list','branch_list','tourType','agents','amalgamate','tour_quote_data'));
 
          }catch(\Exception $e){
 
               return abort(404);
          }
-        
+
 
     }
- 
+
     public function generate_misc_voucher($id)
     {
-           try{ 
-          
+           try{
+
         $companyName = companyController::$companyName;
         $address = companyController::$Address_details;
         $telephone = companyController::$telephone_details;
@@ -159,8 +160,8 @@ class bookingController extends companyController
         //return $companyName;
         try{
 
-        
- 
+
+
 
                         $tour_datd=DB::table('misc_reserve_voucher_details')
                                     ->join('misc_reserve_voucher_headers','misc_reserve_voucher_headers.id','=','misc_reserve_voucher_details.misc_reserve_voucher_header_id')
@@ -172,7 +173,7 @@ class bookingController extends companyController
 
 
                                     $dt_mis_tbl=DB::table('misc_reserve_voucher_details')
-                                             ->join('misc_reserve_voucher_headers','misc_reserve_voucher_headers.id','=','misc_reserve_voucher_details.misc_reserve_voucher_header_id') 
+                                             ->join('misc_reserve_voucher_headers','misc_reserve_voucher_headers.id','=','misc_reserve_voucher_details.misc_reserve_voucher_header_id')
                                             ->join('reservation_miscs','reservation_miscs.id','=','misc_reserve_voucher_details.reservation_misc_id')
                                             ->join('tour_quot_miscs','tour_quot_miscs.id','=','reservation_miscs.tour_quote_misc_id')
                                             ->join('suppliers','suppliers.id','=','reservation_miscs.supplier_id')
@@ -180,8 +181,8 @@ class bookingController extends companyController
                                             ->where('misc_reserve_voucher_headers.misc_voucher_no',$id)
                                             ->select('misc_reserve_voucher_headers.pax','misc_categories.category','tour_quot_miscs.qty','tour_quot_miscs.rate_lkr','suppliers.sup_name')
                                             ->get();
-                                        
-                              
+
+
                                 // return $dt_mis_tbl;
 
 
@@ -208,7 +209,7 @@ class bookingController extends companyController
             }
 
         }catch(Exception $ex){
-            
+
             return "Error";
             return back();
 
@@ -220,30 +221,30 @@ class bookingController extends companyController
 
     }
 
-    
+
 
     public function liveSearch(Request $request)
-    {   
+    {
          if($request->ajax()){
-        
+
             try
             {
 
             $queryd = $request->get('query');
-         
+
             $output = '';
             // $data ='';
 
             if($queryd != '') {
-               
-            
-            
+
+
+
               $grp_data = DB::table('tour_quotation_headers')
                    ->join('tour_booking_lists','tour_booking_lists.tour_id','=','tour_quotation_headers.tour_id')
                    ->select('tour_quotation_headers.tour_id','tour_quotation_headers.tour_code_no',
                    'tour_quotation_headers.tour_code','tour_quotation_headers.title','tour_quotation_headers.pax_adult',
                    'tour_quotation_headers.remarks','tour_quotation_headers.frm_date','tour_quotation_headers.to_date',
-                   'tour_quotation_headers.status','tour_quotation_headers.version_id','tour_booking_lists.tour_ammd_id','tour_booking_lists.tour_ammd','tour_booking_lists.tour_ammd_type')                   
+                   'tour_quotation_headers.status','tour_quotation_headers.version_id','tour_booking_lists.tour_ammd_id','tour_booking_lists.tour_ammd','tour_booking_lists.tour_ammd_type')
                    ->where('tour_quotation_headers.confirmed','=',1)
                    ->where('tour_quotation_headers.promotion','=',0)
                    ->where('tour_quotation_headers.tour_id','LIKE','%'.$queryd.'%')
@@ -253,12 +254,12 @@ class bookingController extends companyController
                    ->orWhere('tour_quotation_headers.frm_date','LIKE','%'.$queryd.'%')
                    ->orderBy('tour_booking_lists.tour_ammd','ASC')
                    ->get();
-           
-                    
-                 $data = $grp_data->groupBy('tour_ammd_id');       
-                                 
+
+
+                 $data = $grp_data->groupBy('tour_ammd_id');
+
                 $total_row = count((array)$data);
-                
+
                // return json_encode($grp_data);
 
             }else{
@@ -268,16 +269,16 @@ class bookingController extends companyController
                 ->select('tour_quotation_headers.tour_id','tour_quotation_headers.tour_code_no',
                 'tour_quotation_headers.tour_code','tour_quotation_headers.title','tour_quotation_headers.pax_adult',
                 'tour_quotation_headers.remarks','tour_quotation_headers.frm_date','tour_quotation_headers.to_date',
-                'tour_quotation_headers.status','tour_quotation_headers.version_id','tour_booking_lists.tour_ammd_id','tour_booking_lists.tour_ammd','tour_booking_lists.tour_ammd_type')                        
+                'tour_quotation_headers.status','tour_quotation_headers.version_id','tour_booking_lists.tour_ammd_id','tour_booking_lists.tour_ammd','tour_booking_lists.tour_ammd_type')
                         ->where('tour_quotation_headers.promotion','0')
-                        ->where('tour_quotation_headers.confirmed','1')                        
+                        ->where('tour_quotation_headers.confirmed','1')
                         ->orderBy('tour_booking_lists.tour_ammd','ASC')->get();
-                
-                $data = $grp_data->groupBy('tour_ammd_id');     
+
+                $data = $grp_data->groupBy('tour_ammd_id');
 
                 $total_row = $data->count();
             }
-              
+
            // return json_encode($data);
 
             if($total_row > 0 ){
@@ -287,14 +288,14 @@ class bookingController extends companyController
 
             foreach($data as $datas => $rows)
             {
-                $output.='                    
-                <tr>                    
-                      <th class="bg-secondary active" colspan="9">&nbsp;&nbsp;&nbsp;Tour Code : '.$rows[0]->tour_code.'</th>                    
+                $output.='
+                <tr>
+                      <th class="bg-secondary active" colspan="9">&nbsp;&nbsp;&nbsp;Tour Code : '.$rows[0]->tour_code.'</th>
                 </tr>
-                ';              
+                ';
 
                 foreach ($rows as $row){
-                   
+
                     $state = '';
                     // $pre_post = 'Main Tour';
 
@@ -312,29 +313,29 @@ class bookingController extends companyController
                         }elseif($row->status == 4){
                             $state ='<span class="m-badge m-badge--danger m-badge--wide">Canceled</span>';
                         }
-                        
-                        
+
+
                         if($row->tour_ammd_type == 0){
 
                             $pre_post='<i class="la la-align-center text-warning" title="Main Tour"></i>';
-                            
+
                             $mt_row_color ='table-secondary';
                             $tilteammd = '';
 
                             $btn_amlgmt='
-                                <a href="/tour/booking/amalgamate/'.$row->tour_id.'/create" 
-                                class="btn btn-success m-btn m-btn--icon btn-sm m-btn--icon-only" 
+                                <a href="/tour/booking/amalgamate/'.$row->tour_id.'/create"
+                                class="btn btn-success m-btn m-btn--icon btn-sm m-btn--icon-only"
                                 title="Amalgamate">
                                 <i class="fa fa-copy"></i>
                                 </a>
                             ';
-                            
+
                         }else if($row->tour_ammd_type == 1){
                             $pre_post='<i class="la la-angle-double-up text-metal" title="Pre Bookings"></i>';
                             $tilteammd = '<span class="m-badge m-badge--info m-badge--wide">>> <b>Amalgamate '.$row->tour_ammd.' </b> << </span>';
                             $btn_amlgmt='
                                         <a href=""  class="btn btn-info m-btn m-btn--icon btn-sm m-btn--icon-only" title="Update Quotation">
-                                        <i class="fa fa-edit"></i> 
+                                        <i class="fa fa-edit"></i>
                                         </a>
                             ';
                         }else if($row->tour_ammd_type == 2){
@@ -343,21 +344,21 @@ class bookingController extends companyController
                             $tilteammd = '<span class="m-badge m-badge--info m-badge--wide">>> <b>Amalgamate '.$row->tour_ammd.' </b> << </span>';
                             $btn_amlgmt='
                                         <a href="" '.$amlgmt.' class="btn btn-info m-btn m-btn--icon btn-sm m-btn--icon-only" title="Update Quotation">
-                                        <i class="fa fa-edit"></i> 
+                                        <i class="fa fa-edit"></i>
                                         </a>
                             ';
                         }
 
-                                        
 
-                        $rt=route('load_dashboard',$row->tour_id);                       
+
+                        $rt=route('load_dashboard',$row->tour_id);
 
 
                     $output .= '
                              <tr class="'.$mt_row_color.'">
-                                <td style="text-align: center;">'.$row->tour_id.'</td>                                                               
+                                <td style="text-align: center;">'.$row->tour_id.'</td>
                                 <td style="text-align: left;">'.str_limit($row->title,30).' '.$tilteammd.'</td>
-                                <td style="text-align: center;">'.$row->pax_adult.'</td>                                
+                                <td style="text-align: center;">'.$row->pax_adult.'</td>
                                 <td style="text-align: center;">'.$row->frm_date.'</td>
                                 <td style="text-align: center;">'.$row->to_date.'</td>
                                 <td style="text-align: center;">'.$pre_post.'</td>
@@ -365,26 +366,26 @@ class bookingController extends companyController
                                 <td>'.str_limit($row->remarks,35).'</td>
                                 <td style="text-align: center;">'. $state.'</td>
                                 <td style="text-align: center; white-space: nowrap; overflow: hidden;">
-                                '.$btn_amlgmt.'                                
-                                <a href="'.$rt.'" 
-                                class="btn btn-warning m-btn m-btn--icon btn-sm m-btn--icon-only" 
+                                '.$btn_amlgmt.'
+                                <a href="'.$rt.'"
+                                class="btn btn-warning m-btn m-btn--icon btn-sm m-btn--icon-only"
                                 title="Reservation">
                                 <i class="fa fa-id-card-o"></i>
                                 </a>
-                                
-                                <a href="" 
-                                class="btn btn-danger m-btn m-btn--icon btn-sm m-btn--icon-only" 
+
+                                <a href=""
+                                class="btn btn-danger m-btn m-btn--icon btn-sm m-btn--icon-only"
                                 title="Cancel">
                                 <i class="fa fa-window-close"></i>
                                 </a>
 
-                                
-                             
+
+
                                 </td>
                              </tr>
                              ';
                 }
-                
+
             }
             }else{
 
@@ -402,17 +403,17 @@ class bookingController extends companyController
             );
 
             return json_encode($data);
-          
+
 
        }catch(Exception $ex){
-        
+
         return json_encode('Error:'.$ex);
-       
+
         }
     }
 
     }
-    
+
 
 
 
@@ -423,14 +424,14 @@ public function guest_allocation($tour_id){
 
         $tourQuotHeader =TourQuotationHeader::where('tour_id',$tour_id)->first();
 
-        
+
         $guest_allocate_data=DB::table('guest_allocations')
                             ->join('tour_quotation_headers','tour_quotation_headers.tour_id','=','guest_allocations.tour_id')
                             ->select('tour_quotation_headers.title','guest_allocations.*')
                             ->where('tour_quotation_headers.tour_id',$tour_id)
                             ->get();
-        
-         return view('tour_section_bookings.components.guest_allocation',compact('tourQuotHeader','guest_allocate_data'));     
+
+         return view('tour_section_bookings.components.guest_allocation',compact('tourQuotHeader','guest_allocate_data'));
 
        }catch(\Exception $e){
 
@@ -439,22 +440,22 @@ public function guest_allocation($tour_id){
     }
 
     public function save_guestDetails(Request $request){
-        
+
         if($request->ajax()){
-            
-           
+
+
 
             try{
-                
+
                 $guest_details=json_decode($request->guest_dataStore);
                 $rowCount = count((array)$guest_details);
-                
+
                 $tour_ID=$request->id;
-                  
+
                 if($rowCount!=0){
-                   
+
                     foreach($guest_details as $guest_detail){
-                      
+
                         $guest_allocate = new GuestAllocation;
                         $guest_allocate->tour_id=$tour_ID;
                         $guest_allocate->guest_name=$guest_detail->gst_name;
@@ -466,14 +467,14 @@ public function guest_allocation($tour_id){
                         $guest_allocate->remarks=$guest_detail->gst_remark;
                         $guest_allocate->save();
                     }
-                    
+
                    return json_encode('saved');
-                   
+
                 }
-               
+
             }
             catch(Exception $ex){
-    
+
                 return json_encode("* Some field cannot be empty!, Please check before save");
                 // return json_encode($ex);
             }
@@ -483,15 +484,15 @@ public function guest_allocation($tour_id){
 
     }
 
-   
-    
+
+
     public function misc_view($id)
     {
           try{
 
         $misc_views=Db::table('tour_quot_miscs')
         ->join('misc_categories','misc_categories.id','=','tour_quot_miscs.misc_categorie_id')
-        
+
         ->select('misc_categories.Rate','misc_categories.mc_pax','misc_categories.category','misc_categories.id',
         'tour_quot_miscs.qty','tour_quot_miscs.totlkr','tour_quot_miscs.ex_rate','tour_quot_miscs.id','tour_quot_miscs.pos as t_pos',
         'tour_quot_miscs.tour_id','tour_quot_miscs.misc_categorie_id','tour_quot_miscs.id')
@@ -502,14 +503,14 @@ public function guest_allocation($tour_id){
         // return $misc_views;
             $tourQuotHeader = TourQuotationHeader::where('tour_id',$id)->where('confirmed',1)->first();
 
-                     
+
 
                                 $get_adv=ReservationMisc::all();
                                         //    return $get_adv;
-                                       
 
 
-            
+
+
             // $supplier_data=Supplier::where('type','Misc')->select('id','sup_s_name')->get();
             $supplier_data=DB::table('suppliers')
                     ->where('suppliers.type','Guide')
@@ -519,14 +520,14 @@ public function guest_allocation($tour_id){
             // return $supplier_data;
 
             $mis_data_dt=DB::table('tour_quot_miscs')
-            ->join('reservation_miscs','reservation_miscs.tour_quote_misc_id','=','tour_quot_miscs.id') 
+            ->join('reservation_miscs','reservation_miscs.tour_quote_misc_id','=','tour_quot_miscs.id')
             ->where('tour_quot_miscs.tour_id',$id)
             ->select('tour_quot_miscs.pos','tour_quot_miscs.ex_rate','tour_quot_miscs.rate_lkr','reservation_miscs.*')
             ->get();
 
 
             $mis_vocher=DB::table('reservation_miscs')
-            ->join('suppliers','suppliers.id','=','reservation_miscs.supplier_id')  
+            ->join('suppliers','suppliers.id','=','reservation_miscs.supplier_id')
             ->join('tour_quot_miscs','tour_quot_miscs.id','=','reservation_miscs.tour_quote_misc_id')
             ->join('misc_categories','misc_categories.id','=','tour_quot_miscs.misc_categorie_id')
             ->select('reservation_miscs.status','suppliers.sup_s_name','suppliers.id as sup_id','misc_categories.category','misc_categories.mc_pax','misc_categories.Rate','tour_quot_miscs.qty','tour_quot_miscs.totlkr','reservation_miscs.id','tour_quot_miscs.id as mis_qut_id','tour_quot_miscs.ex_rate')
@@ -538,7 +539,7 @@ public function guest_allocation($tour_id){
 
 
 
-        //  return $drp_voucher;   
+        //  return $drp_voucher;
             $chk_mis_status=DB::table('reservation_miscs')
                                ->where('reservation_miscs.status',1)
                                ->select('reservation_miscs.status')
@@ -546,9 +547,9 @@ public function guest_allocation($tour_id){
 
 
 
-            
+
             $tour_advance_voucher=DB::table('reservation_miscs')
-            ->join('suppliers','suppliers.id','=','reservation_miscs.supplier_id')  
+            ->join('suppliers','suppliers.id','=','reservation_miscs.supplier_id')
             ->join('tour_quot_miscs','tour_quot_miscs.id','=','reservation_miscs.tour_quote_misc_id')
             ->join('misc_categories','misc_categories.id','=','tour_quot_miscs.misc_categorie_id')
             ->join('tour_quotation_headers','tour_quotation_headers.id','=','tour_quot_miscs.tour_quotation_header_id')
@@ -558,13 +559,13 @@ public function guest_allocation($tour_id){
             ->where('tour_quot_miscs.tour_id',$id)
             ->orderBy('reservation_miscs.id','ASC')
             ->get();
-            
+
 
 
 
             $drp_voucher_advance=$tour_advance_voucher->groupBy('sup_id');
-            
-                      
+
+
 
             $tour_advance_vouchers=DB::table('reservation_miscs')
                                     ->join('mis_tour_adv_req_details','mis_tour_adv_req_details.reservation_misc_id','=','reservation_miscs.id')
@@ -581,31 +582,31 @@ public function guest_allocation($tour_id){
 
 
 
-                       
 
 
 
-            
+
+
 
          $hasVoucher_list_misc = DB::table('misc_reserve_voucher_headers')
          ->join('users','users.id','=','misc_reserve_voucher_headers.user_id')
          ->join('misc_reserve_voucher_details','misc_reserve_voucher_details.misc_reserve_voucher_header_id','=','misc_reserve_voucher_headers.id')
          ->join('reservation_miscs','reservation_miscs.id','=','misc_reserve_voucher_details.reservation_misc_id')
-         ->select('misc_reserve_voucher_headers.*','users.name as user_name','reservation_miscs.advance')    
+         ->select('misc_reserve_voucher_headers.*','users.name as user_name','reservation_miscs.advance')
          ->where('tour_id',$id)
          ->where('reservation_miscs.advance',0)
          ->get();
 
 
 
-      
-         
+
+
 
          $hasVoucher_list_misc_advacne= DB::table('mis_tour_adv_req_headers')
          ->join('users','users.id','=','mis_tour_adv_req_headers.user_id')
          ->join('mis_tour_adv_req_details','mis_tour_adv_req_details.mis_tour_adv_req_header_id','=','mis_tour_adv_req_headers.id')
          ->join('reservation_miscs','reservation_miscs.id','=','mis_tour_adv_req_details.reservation_misc_id')
-         ->select('mis_tour_adv_req_headers.*','users.name as user_name','reservation_miscs.advance')    
+         ->select('mis_tour_adv_req_headers.*','users.name as user_name','reservation_miscs.advance')
          ->where('tour_id',$id)
          ->where('reservation_miscs.advance',1)
          ->get();
@@ -615,19 +616,19 @@ public function guest_allocation($tour_id){
                       ->join('reservation_miscs','reservation_miscs.id','=','mis_tour_adv_req_details.reservation_misc_id')
                       ->join('tour_quot_miscs','tour_quot_miscs.id','=','reservation_miscs.tour_quote_misc_id')
                       ->join('users','users.id','=','mis_tour_adv_req_headers.user_id')
-                      ->select('mis_tour_adv_req_headers.*','users.name as user_name','reservation_miscs.advance' )   
-                      ->where('tour_quot_miscs.tour_id',$id) 
+                      ->select('mis_tour_adv_req_headers.*','users.name as user_name','reservation_miscs.advance' )
+                      ->where('tour_quot_miscs.tour_id',$id)
                       ->where('reservation_miscs.advance',1)
                       ->get();
 
-      
+
          $tour_reserve=MisTourAdvReqHeader::where('tour_id',$id)->get();
-      
+
 //    $tab_pos=$this->tb_pos;
             //  $tab_pos=$this->page_postion;
              $this->tb_pos=$this->page_postion;
              $tab_pos= $this->tb_pos;
-        
+
 
             //  $tb=02;
         //    return $this->page_postion;
@@ -640,7 +641,7 @@ public function guest_allocation($tour_id){
         // return $tab_pos;
 
         // return $tab_pos;
-        
+
         // return $this->tb_pos;
         //    return $drp_voucher;
 
@@ -649,7 +650,7 @@ public function guest_allocation($tour_id){
 
           return abort(404);
     }
-         
+
     }
 
 
@@ -660,36 +661,36 @@ public function guest_allocation($tour_id){
     //    $this->page_postion=$requet->pg_tab;
     //    return json_encode($requet->pg_tab);
 
-          
+
         if($request->ajax())
         {
-            
+
             try{
 
-                
-                  
+
+
                 $mis_vies_data = json_decode($request->data_dt);
                 $_rowCount = count((array)$mis_vies_data);
 
-             
+
 
               if($_rowCount!=0)
               {
-                
+
 
                 foreach($mis_vies_data as $mis)
                 {
                     $misc_id=$mis->mis_id;
-                   
+
                     $mis_data=ReservationMisc::where('tour_quote_misc_id',$misc_id)->select('id')->first();
-                   
+
                     if($mis_data !='')
                     {
-                       
+
                      ReservationMisc::where('tour_quote_misc_id',$misc_id)->delete();
                     }
-                    
-                   
+
+
                         if($mis->sup_id == 0)
                         {
                             return json_encode('Please select suppler');
@@ -706,21 +707,21 @@ public function guest_allocation($tour_id){
                         $reservation_mis->status=$mis->status;
                         $reservation_mis->pos = $mis->id;
                         $reservation_mis->save();
-                            
+
                         $tour_qt_reserve_misc_req_qty_update = TourQuotMisc::findOrFail($mis->mis_id);
                         $tour_qt_reserve_misc_req_qty_update->qty = $mis->misc_qty;
                         $tour_qt_reserve_misc_req_qty_update->save();
-                            
+
                     }
                 }
 
-             
+
                 return json_encode('saved');
               }
             }
             catch(\Exception $e)
             {
-                return Json_encode("Error".$e); 
+                return Json_encode("Error".$e);
             }
         }
 
@@ -731,19 +732,19 @@ public function guest_allocation($tour_id){
 
           try{
             $tourQuotHeader = TourQuotationHeader::where('tour_id',$id)->first();
-       
+
             $DistanceDtList = DB::table('tour_quot_locations')
                                 ->join('tour_quot_distances','tour_quot_distances.tour_quot_location_id','=','tour_quot_locations.id')
                                 ->select('tour_quot_distances.*','tour_quot_locations.tour_day','tour_quot_locations.ttkms')
                                 ->orderBy('tour_quot_distances.pos')
                                 ->where('tour_quot_locations.tour_id',$id)
                                 ->get();
-    
+
             $LocationDtList_gp = $DistanceDtList->groupBy('tour_day');
-            // return $LocationDtList_gp; 
-    
+            // return $LocationDtList_gp;
+
             return view('tour_section_bookings.components.route_view',compact('tourQuotHeader','LocationDtList_gp'));
-                              
+
           }catch(\Exception $e){
 
               return abort(404);
@@ -753,7 +754,7 @@ public function guest_allocation($tour_id){
 
     public function hotel_reserve($tourId){
           try{
-       
+
         $tourQuotHeader = TourQuotationHeader::where('tour_id',$tourId)->first();
 
 
@@ -774,7 +775,7 @@ public function guest_allocation($tour_id){
                    'tour_quotation_hotel_details.rate_to_base','tour_quotation_hotel_details.sql_splm','tour_quotation_hotel_details.dbl_splm',
                    'tour_quotation_hotel_details.tbl_splm','tour_quotation_hotel_details.qd_splm')
         ->get();
-        
+
 
 
         $tourQuoteHotel_gp = $tourQuoteHotels->groupBy('tour_day');
@@ -805,7 +806,7 @@ public function guest_allocation($tour_id){
                                     ->get();
 
             $tourQouHotelOptSup_gp = $tourQouHotelOptSup->groupBy('tour_day');
-            
+
             $tour_resr_rmQty = DB::table('accmd_reservations')
                                  ->join('tour_quotation_hotel_details','tour_quotation_hotel_details.id','=','accmd_reservations.tour_quotation_hotel_detail_id')
                                  ->join('tour_quotation_hotels','tour_quotation_hotels.id','=','tour_quotation_hotel_details.tour_quotation_hotel_id')
@@ -826,14 +827,14 @@ public function guest_allocation($tour_id){
                                             ->where('accmd_reservations.status','!=',0)
                                             ->orderBy('tour_quotation_hotels.tour_day', 'ASC')
                                             ->get();
-                                            
+
             $reservation_voucher_list_gp = $reservation_voucher_list->groupBy('supid');
-            
+
             $hasVoucher_list = DB::table('accmd_resevation_voucher_headers')
                                 ->join('users','users.id','=','accmd_resevation_voucher_headers.user_id')
-                                ->select('accmd_resevation_voucher_headers.*','users.name as user_name')    
+                                ->select('accmd_resevation_voucher_headers.*','users.name as user_name')
                                 ->where('tour_id',$tourId)->get();
-            
+
             $roomAllocation = TourQuoteRoomAllocation::where('tour_id',$tourId)->get();
             //return $roomAllocation->all();
 
@@ -842,10 +843,10 @@ public function guest_allocation($tour_id){
 
 
           }catch(\Exception $e){
-            //return 'SADASD'.$e; 
+            //return 'SADASD'.$e;
               return abort(404);
           }
-          
+
 
     }
 
@@ -860,20 +861,20 @@ public function guest_allocation($tour_id){
             $tourID = $req->tourID;
 
             $cmp_rowCount = count((array)$resv_cmpdata);
-            $opt_rowCount = count((array)$resv_optdata);  
+            $opt_rowCount = count((array)$resv_optdata);
 
 
                 try{
                     DB::beginTransaction();
 
                     $checkAVBLc_details = AccmdReservation::where('tour_quotation_hotel_detail_id', $qoutHTDHeaderID)->select('id')->first();
-                    
+
                     if ($checkAVBLc_details != '') {
 
-                        AccmdReservation::where('tour_quotation_hotel_detail_id', $qoutHTDHeaderID)->delete();                        
+                        AccmdReservation::where('tour_quotation_hotel_detail_id', $qoutHTDHeaderID)->delete();
                     }
                             //return json_encode($tourID);
-                            $tourQoutHeaderUp = TourQuotationHeader::where('tour_id',$tourID)->first();                            
+                            $tourQoutHeaderUp = TourQuotationHeader::where('tour_id',$tourID)->first();
                             $tourQoutHeaderUp->status = 2;
                             $tourQoutHeaderUp->save();
 
@@ -899,7 +900,7 @@ public function guest_allocation($tour_id){
                         if($cmp_rowCount !=0){
 
                                 foreach($resv_cmpdata as $resv_cmpdata_lst)
-                                {   
+                                {
 
                                     $rowID = $resv_cmpdata_lst->tblRowId;
 
@@ -909,7 +910,7 @@ public function guest_allocation($tour_id){
                                     $tourHotelCmpSup->save();
 
 
-                               
+
                                 }
 
                             }
@@ -917,15 +918,15 @@ public function guest_allocation($tour_id){
                             if($opt_rowCount !=0){
 
                                 foreach($resv_optdata as $resv_optdata_lst)
-                                {   
-                                    
+                                {
+
                                     $rowID = $resv_optdata_lst->tblRowId;
 
                                     $tourHotelOptSup = TourQoutHotelOptmSupliment::find($rowID);
                                     $tourHotelOptSup->qty = $resv_optdata_lst->opt_qty;
                                     $tourHotelOptSup->cheked = $resv_optdata_lst->chk;
                                     $tourHotelOptSup->save();
-                               
+
                                 }
 
                             }
@@ -939,20 +940,20 @@ public function guest_allocation($tour_id){
 
 
                 }catch(Exception $ex){
-                    
+
                     DB::rollBack();
                     return json_encode('Sorry!, Something went wrong. Error');
 
                 }
-            
 
-            
+
+
        }
-        
+
     }
 
     public function reservation_amend_accmd(Request $req){
-       
+
         if($req->ajax()){
 
             $resv_cmpdata = json_decode($req->cmpSupListData);
@@ -962,19 +963,19 @@ public function guest_allocation($tour_id){
             $tourID = $req->tourID;
 
             $cmp_rowCount = count((array)$resv_cmpdata);
-            $opt_rowCount = count((array)$resv_optdata);  
+            $opt_rowCount = count((array)$resv_optdata);
 
 
                 try{
-                    
-                   
+
+
 
                     $checkAVBLc_details = AccmdReservation::where('tour_quotation_hotel_detail_id', $qoutHTDHeaderID)->get();
-                    
+
                     if ($checkAVBLc_details != '') {
 
                         DB::beginTransaction();
-                       
+
                             $amcdRes = AccmdReservation::where('tour_quotation_hotel_detail_id',$qoutHTDHeaderID)->first();
 
                             //$amcdRes->tour_quotation_hotel_detail_id  = $qoutHTDHeaderID;
@@ -993,7 +994,7 @@ public function guest_allocation($tour_id){
 
                             $accmd_reserverVoucher_added = DB::table('accmd_resevation_voucher_details')
                                                                     ->join('accmd_resevation_voucher_headers','accmd_resevation_voucher_headers.id','=','accmd_resevation_voucher_details.accmd_resevation_voucher_header_id')
-                                                                    ->join('accmd_reservations','accmd_reservations.id','=','accmd_resevation_voucher_details.accmd_reservation_id')                                                                    
+                                                                    ->join('accmd_reservations','accmd_reservations.id','=','accmd_resevation_voucher_details.accmd_reservation_id')
                                                                     ->select('accmd_resevation_voucher_headers.hotel_voucher_no','accmd_resevation_voucher_headers.amnd')
                                                                     ->where('accmd_reservations.tour_quotation_hotel_detail_id',$qoutHTDHeaderID)
                                                                     ->first();
@@ -1008,13 +1009,13 @@ public function guest_allocation($tour_id){
                                 $Accmd_reserved_Vch_change = AccmdResevationVoucherHeader::where('hotel_voucher_no',$voucherNo)->first();
                                 $Accmd_reserved_Vch_change->amnd = ($accmd_reserverVoucher_added->amnd + 1);
                                 $Accmd_reserved_Vch_change->save();
-                                
+
                             }
-                            
+
                         if($cmp_rowCount !=0){
 
                                 foreach($resv_cmpdata as $resv_cmpdata_lst)
-                                {   
+                                {
 
                                     $rowID = $resv_cmpdata_lst->tblRowId;
 
@@ -1030,37 +1031,37 @@ public function guest_allocation($tour_id){
                             if($opt_rowCount !=0){
 
                                 foreach($resv_optdata as $resv_optdata_lst)
-                                {   
-                                    
+                                {
+
                                     $rowID = $resv_optdata_lst->tblRowId;
 
                                     $tourHotelOptSup = TourQoutHotelOptmSupliment::find($rowID);
                                     $tourHotelOptSup->qty = $resv_optdata_lst->opt_qty;
                                     $tourHotelOptSup->cheked = $resv_optdata_lst->chk;
                                     $tourHotelOptSup->save();
-                               
+
                                 }
 
                             }
 
                     DB::commit();
-                        
+
                     session(['alert-type' => 'success']);
                     session(['message' => 'Hotels Reservation Amended successfully!']);
-                    
+
                 return json_encode('saved');
 
                 }
 
                 }catch(Exception $ex){
-                    
+
                     DB::rollBack();
                     return json_encode('Sorry!, Something went wrong. Error'.$ex);
 
                 }
-            
 
-            
+
+
        }
     }
 
@@ -1075,7 +1076,7 @@ public function guest_allocation($tour_id){
         //return $companyName;
         try{
 
-        
+
         // $tableData = '';
                 $voucherData = DB::table('accmd_resevation_voucher_details')
                                 ->join('accmd_reservations','accmd_reservations.id','=','accmd_resevation_voucher_details.accmd_reservation_id')
@@ -1084,7 +1085,7 @@ public function guest_allocation($tour_id){
                                 ->join('hotel_packages','tour_quotation_hotel_details.hotel_package_id','=','hotel_packages.id')
                                 ->join('room_types','hotel_packages.room_type_id','=','room_types.id')
                                 ->join('meal_planes','hotel_packages.meal_plane_id','=','meal_planes.id')
-                                ->join('tour_quotation_hotels','tour_quotation_hotels.id','tour_quotation_hotel_details.tour_quotation_hotel_id')                            
+                                ->join('tour_quotation_hotels','tour_quotation_hotels.id','tour_quotation_hotel_details.tour_quotation_hotel_id')
                                 ->where('accmd_resevation_voucher_headers.hotel_voucher_no',$id)
                                 ->select('accmd_reservations.sgl_qty','accmd_reservations.dbl_qty','accmd_reservations.twn_qty',
                                     'accmd_reservations.tbl_qty','accmd_reservations.qd_qty','tour_quotation_hotels.tour_date',
@@ -1104,9 +1105,9 @@ public function guest_allocation($tour_id){
                                     'accmd_resevation_voucher_headers.remarks','accmd_resevation_voucher_headers.condi',
                                     'accmd_resevation_voucher_headers.pax','suppliers.sup_s_name','accmd_resevation_voucher_headers.amnd')
                                 ->get();
-       
+
         //return $voucherData;
-            
+
             $rowCount = $voucherData->count();
 
 
@@ -1118,7 +1119,7 @@ public function guest_allocation($tour_id){
             }
 
         }catch(Exception $ex){
-            
+
             return back();
 
         }
@@ -1144,8 +1145,8 @@ public function guest_allocation($tour_id){
                 $tourQouteHeaderID = $request->qoutheaderId;
                 $supid = $request->supID;
 
-               
-    
+
+
                 $rates = $request->rates;
                 $remarks = $request->remarks;
                 $conf_to = $request->conf_to;
@@ -1157,34 +1158,34 @@ public function guest_allocation($tour_id){
 
                 $mis_pax_data=json_decode($request->mis_dt_type);
                 $packs_count=count((array)$mis_pax_data);
-              
+
                 if($packs_count!=0)
-                { 
-                    
+                {
+
                 $hasActiveVouchermis = MiscReserveVoucherHeader::where('supplier_id',$supid)
                                                                 ->where('tour_id',$tourID)
                                                                 ->where('status',1)->first();
-                                                                
+
 
                 if($hasActiveVouchermis ==''){
-                   
+
                     try{
-                       
-                        
+
+
                         DB::beginTransaction();
-                        
+
                         $voucherNoUpdate = TrData::where('id',3)->select('id','tour_id')->first();
-                                 
+
                         $voucherNo =($voucherNoUpdate->tour_id)+1;
                         $voucherNoUpdate->tour_id = $voucherNo;
                         $voucherNoUpdate->save();
-                        
+
                         $newVoucher = new MiscReserveVoucherHeader();
-                        
+
                         $newVoucher->misc_voucher_no = $voucherNo;
                         $newVoucher->tour_quotation_header_id = $tourQouteHeaderID;
                         $newVoucher->tour_id = $tourID;
-                        $newVoucher->vpos = $request->Row_Count;                        
+                        $newVoucher->vpos = $request->Row_Count;
                         $newVoucher->user_id = Auth::user()->id;
                         $newVoucher->supplier_id = $supid;
                         $newVoucher->confirmed_date = $conf_date;
@@ -1194,7 +1195,7 @@ public function guest_allocation($tour_id){
                         $newVoucher->remarks = $remarks;
                         $newVoucher->condi = $condition1;
                         $newVoucher->pax = $noof_pax;
-                        
+
                         $newVoucher->status = 1;
                         $newVoucher->save();
 
@@ -1213,13 +1214,13 @@ public function guest_allocation($tour_id){
 
                         }
 
-                        
+
                         DB::commit();
-                      
+
                         return json_encode('added');
 
                     }catch(Exception $ex)
-                    {   
+                    {
                         DB::rollBack();
                         return json_encode('* Some field cannot be empty!, Please check before save');
                     }
@@ -1231,28 +1232,28 @@ public function guest_allocation($tour_id){
                 }
 
                 }
-               
+
             }
             catch(Exception $eeex)
             {
                     return json_encode('error');
             }
 
-           
 
-            
+
+
         }
-       
+
     }
 
     public function find_rm_list_data(Request $req){
-        
+
         if($req->ajax()){
 
             $sup_id = $req->sup_id;
             $tour_id = $req->tour_id;
 
-            try{ 
+            try{
                 $output='';
 
                 $pkgdata = DB::table('accmd_resevation_voucher_details')
@@ -1263,7 +1264,7 @@ public function guest_allocation($tour_id){
                             ->join('hotel_packages','hotel_packages.id','=','tour_quotation_hotel_details.hotel_package_id')
                             ->join('meal_planes','meal_planes.id','=','hotel_packages.meal_plane_id')
                             ->join('room_types','room_types.id','=','hotel_packages.room_type_id')
-                            
+
                             ->select('accmd_reservations.*','tour_quotation_hotels.tour_date','tour_quotation_hotels.tour_day','meal_planes.meal_plane',
                                         'room_types.r_type','hotel_packages.Package_name')
                             ->where('accmd_resevation_voucher_headers.supplier_id',$sup_id)
@@ -1303,14 +1304,14 @@ public function guest_allocation($tour_id){
                 return json_encode('Error:');
             }
 
-            
+
         }
-        
+
     }
     public function search_rm_list_data(Request $req)
     {
-        
-        if($req->ajax()){ 
+
+        if($req->ajax()){
 
             try{
 
@@ -1322,7 +1323,7 @@ public function guest_allocation($tour_id){
                 if($tour_id!=0){
 
                     if($sql_qry !='')
-                    {  
+                    {
                         $guestData = GuestAllocation::where('tour_id',$tour_id)
                                                     ->where('guest_name','LIKE','%'.$sql_qry.'%')
                                                     ->orWhere('passport_no','LIKE','%'.$sql_qry.'%')
@@ -1331,17 +1332,17 @@ public function guest_allocation($tour_id){
                                                                                          // return json_encode($guestData);
                     }else{
 
-                        $guestData = GuestAllocation::where('tour_id',$tour_id)                                                
+                        $guestData = GuestAllocation::where('tour_id',$tour_id)
                                                     ->get();
                     }
                     $rowCount = $guestData->count();
-                    
+
                     if($rowCount!=0)
-                    {  
-                        $row_pos = 0;                       
+                    {
+                        $row_pos = 0;
                         foreach($guestData as $guest_list)
                         {
-                            
+
                             $row_pos++;
 
                                 $output.='
@@ -1365,23 +1366,23 @@ public function guest_allocation($tour_id){
                     }else{
                         $output='
                                     <tr>
-                                        <td colspan="6"></td>                                        
+                                        <td colspan="6"></td>
                                     </tr>';
                     }
-                    
+
                     return json_encode($output);
                 }
             }catch(Exception $ex){
                 return json_encode('Error:'.$ex);
             }
-            
+
         }
     }
 
     public function accmd_reserve_genarate(Request $req)
-    {   
-        
-        if($req->ajax()){ 
+    {
+
+        if($req->ajax()){
 
             $tourID = $req->tourID;
             $tourQouteHeaderID = $req->qoutheaderId;
@@ -1407,25 +1408,25 @@ public function guest_allocation($tour_id){
                 $hasActiveVoucher = AccmdResevationVoucherHeader::where('supplier_id',$supid)
                                                                  ->where('tour_id',$tourID)
                                                                  ->where('status',1)->first();
-                                                                
+
                 if($hasActiveVoucher ==''){
                     try{
 
-                        
+
                         DB::beginTransaction();
-                        
+
                         $voucherNoUpdate = TrData::where('id',2)->select('id','tour_id')->first();
-                                 
+
                         $voucherNo =($voucherNoUpdate->tour_id)+1;
                         $voucherNoUpdate->tour_id = $voucherNo;
                         $voucherNoUpdate->save();
-                        
+
                         $newVoucher = new AccmdResevationVoucherHeader();
-                        
+
                         $newVoucher->hotel_voucher_no = $voucherNo;
                         $newVoucher->tour_quotation_header_id = $tourQouteHeaderID;
                         $newVoucher->tour_id = $tourID;
-                        $newVoucher->vpos = $req->rowId_rg;                        
+                        $newVoucher->vpos = $req->rowId_rg;
                         $newVoucher->user_id = Auth::user()->id;
                         $newVoucher->supplier_id = $supid;
                         $newVoucher->confirmed_date = $conf_date;
@@ -1446,7 +1447,7 @@ public function guest_allocation($tour_id){
                             $newVoucherDetails = new AccmdResevationVoucherDetails();
                             $newVoucherDetails->accmd_resevation_voucher_header_id = $voucherHeaderLastID->id;
                             $newVoucherDetails->accmd_reservation_id = $pkgs->rowId;
-                                                        
+
                             $newVoucherDetails->save();
 
                             $updateStateAccmd_reservation = AccmdReservation::find($pkgs->rowId);
@@ -1455,12 +1456,12 @@ public function guest_allocation($tour_id){
 
                         }
 
-                        
+
                         DB::commit();
                         return json_encode('added');
 
                     }catch(Exception $ex)
-                    {   
+                    {
                         DB::rollBack();
                         return json_encode('* Some field cannot be empty!, Please check before save');
                     }
@@ -1470,7 +1471,7 @@ public function guest_allocation($tour_id){
                     return json_encode('exceed');
                 }
 
-            } 
+            }
 
             // }catch(Exception $ex)
             // {   //DB::rollBack();
@@ -1478,10 +1479,10 @@ public function guest_allocation($tour_id){
             // }
 
 
-            
+
         }
-        
-        
+
+
     }
 
     public function misc_reserve_voucher(Request $req){
@@ -1491,22 +1492,22 @@ public function guest_allocation($tour_id){
         $telephone = companyController::$telephone_details;
         $web_mail = companyController::$web_mail_details;
         //return $companyName;
-        
+
 
 
 
         return view('tour_section_bookings.print_doc.misc_resrvation',compact('companyName','address','telephone','web_mail'));
-        
+
     }
 
 
     public function transport_allocation($id){
 
           try{
-           
+
        // $gp_vehivletypeDataSaved = tourQouteGpVehicleTypes::where('tour_quotation_header_id',$tourQuotHeader->id)->get();
-        
-       
+
+
         $VehicleTypes = VehicleType::all();
 
         $tourQuotHeader = TourQuotationHeader::where('tour_id',$id)->first();
@@ -1520,16 +1521,16 @@ public function guest_allocation($tour_id){
                                 ->where('tour_quot_transports.tour_id',"=",$id)
                                 ->where('tour_quotation_headers.confirmed',1)
                                 ->get();
-                                
-                               
+
+
         // return $transport_details;
        // $t_trns=TourQuotTransport::where('tour_id',$id)->first();
 
         $tr_reserve=TransportReserve::all();
 
         $reserve_transpoarts=DB::table('transport_reserves')
-                            ->join('tour_quot_transports','tour_quot_transports.id','=','transport_reserves.tour_quot_transport_id')  
-                            ->join('vehicle_types','vehicle_types.id',"=",'tour_quot_transports.vehicle_type_id')  
+                            ->join('tour_quot_transports','tour_quot_transports.id','=','transport_reserves.tour_quot_transport_id')
+                            ->join('vehicle_types','vehicle_types.id',"=",'tour_quot_transports.vehicle_type_id')
                             ->where('tour_quot_transports.tour_id',$id)
                             ->select('transport_reserves.frm_date','transport_reserves.to_date','tour_quot_transports.millage','tour_quot_transports.rate_pkm','tour_quot_transports.totlkr','vehicle_types.type','vehicle_types.no_of_seats','transport_reserves.id','transport_reserves.status','tour_quot_transports.id as trns_id')
                             ->get();
@@ -1561,14 +1562,14 @@ public function guest_allocation($tour_id){
 
         try
         {
-            
+
             // $checkAVBLc_details = AccmdReservation::where('tour_quotation_hotel_detail_id', $qoutHTDHeaderID)->select('id')->first();
-                    
+
             // if ($checkAVBLc_details != '') {
 
-            //     AccmdReservation::where('tour_quotation_hotel_detail_id', $qoutHTDHeaderID)->delete();                        
+            //     AccmdReservation::where('tour_quotation_hotel_detail_id', $qoutHTDHeaderID)->delete();
             // }
-                
+
 
             if($request->ajax())
             {
@@ -1576,7 +1577,7 @@ public function guest_allocation($tour_id){
 
                 $tr_data=json_decode($request->trns_data);
                 $tr_count=count((array)$tr_data);
-                
+
                 if($tr_count!=0)
                 {
                     foreach($tr_data as $t_dta)
@@ -1586,9 +1587,9 @@ public function guest_allocation($tour_id){
                         if($dt !='')
                         {
                             TransportReserve::where('tour_quot_transport_id',$t_id)->delete();
-                           
+
                         }
-                        
+
                         $tr_dt=new TransportReserve;
                            $tr_dt->user_id= Auth::user()->id;
                            $tr_dt->tour_quot_transport_id=$t_dta->tr_quot_id;
@@ -1603,13 +1604,13 @@ public function guest_allocation($tour_id){
                     return json_encode('saved');
                 }
 
-               
+
             }
 
-     
 
 
-        
+
+
 
         }catch(Exception $ex)
         {
@@ -1619,14 +1620,14 @@ public function guest_allocation($tour_id){
 
     }
 
-    
+
 
 
     public function misc_reserve_advance_store(Request $request)
     {
 
         $this->page_postion=$request->page_tab;
-        
+
         if($request->ajax())
         {
             try
@@ -1636,50 +1637,50 @@ public function guest_allocation($tour_id){
                 $tourQouteHeaderID = $request->qoutheaderId;
                 $supid = $request->supID;
 
-               
-    
-              
+
+
+
                 $remarks = $request->remarks;
                 $rq_for = $request->rq_for;
                 $rq_ad_dt = $request->rq_ad_dt;
                 $setle_dt = $request->setle_dt;
-               
+
                 $mis_pax_data=json_decode($request->mis_dt_type_advance);
                 $packs_count=count((array)$mis_pax_data);
-              
+
                 if($packs_count!=0)
-                { 
-                    
+                {
+
                 $hasActiveVouchermis_advance = MisTourAdvReqHeader::where('supplier_id',$supid)
                                                                 ->where('tour_id',$tourID)
                                                                 ->where('status',1)->first();
-                                                                
+
 
                 if($hasActiveVouchermis_advance ==''){
-                   
+
                     try{
-                       
-                        
+
+
                         DB::beginTransaction();
-                        
+
                         $voucherNoUpdate = TrData::where('id',4)->select('id','tour_id')->first();
-                                 
+
                         $voucherNo =($voucherNoUpdate->tour_id)+1;
                         $voucherNoUpdate->tour_id = $voucherNo;
                         $voucherNoUpdate->save();
-                        
+
                         $newVoucher = new MisTourAdvReqHeader();
-                        
+
                         $newVoucher->misc_voucher_no = $voucherNo;
                         $newVoucher->tour_quotation_header_id = $tourQouteHeaderID;
                         $newVoucher->tour_id = $tourID;
-                        $newVoucher->vpos = $request->Row_Count;                        
+                        $newVoucher->vpos = $request->Row_Count;
                         $newVoucher->user_id = Auth::user()->id;
                         $newVoucher->supplier_id = $supid;
                         $newVoucher->Requested_For = $rq_for;
                         $newVoucher->Required_Date = $rq_ad_dt;
                         $newVoucher->Settlement_Date = $setle_dt;
-                      
+
                         $newVoucher->remarks = $remarks;
                         $newVoucher->status = 1;
                         $newVoucher->save();
@@ -1699,12 +1700,12 @@ public function guest_allocation($tour_id){
 
                         }
 
-                        
+
                         DB::commit();
                         return json_encode('added');
 
                     }catch(Exception $ex)
-                    {   
+                    {
                         DB::rollBack();
                         return json_encode('* Some field cannot be empty!, Please check before save');
                     }
@@ -1716,23 +1717,23 @@ public function guest_allocation($tour_id){
                 }
 
                 }
-               
+
             }
             catch(Exception $eeex)
             {
                     return json_encode('error');
             }
 
-           
 
-            
+
+
         }
 
     }
 
 
     public function misc_reserve_advance_generate_voucher($v_id)
-    {               
+    {
         try{
 
         $companyName = companyController::$companyName;
@@ -1741,7 +1742,7 @@ public function guest_allocation($tour_id){
         $web_mail = companyController::$web_mail_details;
 
 
-   
+
         $dt_mis_tbl_advance=DB::table('mis_tour_adv_req_details')
         ->join('mis_tour_adv_req_headers','mis_tour_adv_req_headers.id','=','mis_tour_adv_req_details.mis_tour_adv_req_header_id')
        ->join('reservation_miscs','reservation_miscs.id','=','mis_tour_adv_req_details.reservation_misc_id')
@@ -1750,7 +1751,7 @@ public function guest_allocation($tour_id){
        ->where('mis_tour_adv_req_headers.misc_voucher_no',$v_id)
        ->select('misc_categories.category','misc_categories.Rate','misc_categories.id')
        ->get();
-   
+
     //    return $dt_mis_tbl_advance;
 
         $tour_data_dt_advance=DB::table('mis_tour_adv_req_headers')
@@ -1771,7 +1772,7 @@ public function guest_allocation($tour_id){
         if($rowCount != 0)
         {
             return view('tour_section_bookings.print_doc.tour_advanced',compact('companyName','address','telephone','web_mail','tour_data_dt_advance','dt_mis_tbl_advance'));
-       
+
         }
         else
         {
@@ -1783,18 +1784,18 @@ public function guest_allocation($tour_id){
     }
 
 
-        
+
     }
-    
+
     public function guide_view($t_id)
     {
-        
-        
+
+
         try{
 
 
                     $tourQuotHeader =TourQuotationHeader::where('tour_id',$t_id)->first();
-                    
+
 
                     $tourQuoteGuides=DB::table('tour_quot_guide_details')
                     ->join('tour_quot_guides','tour_quot_guides.id','=','tour_quot_guide_details.tour_quot_guide_id')
@@ -1806,7 +1807,7 @@ public function guest_allocation($tour_id){
                             'tour_quot_guide_details.guide_fee','tour_quot_guide_details.room_rate','tour_quot_guide_details.guide_type_id',
                             'tour_quot_guide_details.guide_room_id',
                             'tour_quot_guide_details.pos','tour_quot_guides.tour_day','tour_quot_guide_details.id')
-                            
+
                     ->get();
 
                     $tour_guiderserv = DB::table('guide_allocations')
@@ -1814,22 +1815,22 @@ public function guest_allocation($tour_id){
                         ->join('tour_quot_guides','tour_quot_guides.id','=','tour_quot_guide_details.tour_quot_guide_id')
                         ->select('tour_quot_guides.tour_day','tour_quot_guide_details.pos','guide_allocations.*')
                         ->where('tour_quot_guides.tour_id',$t_id)
-                        ->get(); 
+                        ->get();
 
                     $guide_room_types=DB::table('guide_room_types')
                             ->join('guide_rooms','guide_rooms.guide_room_type_id','=','guide_room_types.id')
                             ->select('guide_room_types.gr_types','guide_rooms.id')
                             ->get();
-                    
+
 
                     $sup_guide=DB::table('guides')
                                 ->join('suppliers','guides.supplier_id','=','suppliers.id')
                                 ->join('guide_types','guide_types.id','=','guides.guide_type_id')
-                                ->where('suppliers.type','Guide')                    
+                                ->where('suppliers.type','Guide')
                                 ->select('suppliers.sup_s_name','suppliers.id','guides.guide_type_id')
                                 ->get();
-                            
-                
+
+
 
                     $guide_hotels=DB::table('suppliers')
                             ->join('guide_rooms','guide_rooms.supplier_id','=','suppliers.id')
@@ -1847,7 +1848,7 @@ public function guest_allocation($tour_id){
                                             'tour_quot_guide_details.guide_fee','tour_quot_guides.tour_date',
                                             'tour_quot_guide_details.tour_id',
                                             'tour_quot_guides.tour_day','suppliers.sup_s_name','suppliers.id as supid','guide_allocations.*')
-                                ->orderBy('tour_quot_guides.tour_day','ASC')          
+                                ->orderBy('tour_quot_guides.tour_day','ASC')
                                 ->get();
 
                     $guide_hotel_voucher=DB::table('guide_hotel_reserves')
@@ -1864,24 +1865,24 @@ public function guest_allocation($tour_id){
                                         'tour_quot_guide_details.tour_id','guide_types.g_type','guide_room_types.gr_types',
                                         'tour_quot_guides.tour_day','suppliers.sup_s_name as supname','suppliers.id as supid','guide_hotel_reserves.*')
                                 ->get();
-                                                
-                                
-                                
-                    $tourQuoteguidehotel_voucher=$guide_hotel_voucher->groupBy('supid');    
-                                
+
+
+
+                    $tourQuoteguidehotel_voucher=$guide_hotel_voucher->groupBy('supid');
+
                     $tourQuoteguide_details=$tourQuoteGuides->groupBy('tour_day');
-                    
+
                     $tourQuoteguide_voucher=$guide_voucher->groupBy('supid');
 
                     $hasVoucher_list = DB::table('guide_allocate_voucher_headers')
                                             ->join('users','users.id','=','guide_allocate_voucher_headers.user_id')
-                                            ->select('guide_allocate_voucher_headers.*','users.name as user_name')    
+                                            ->select('guide_allocate_voucher_headers.*','users.name as user_name')
                                             ->where('tour_id',$t_id)
                                             ->get();
-                    
+
                     $hashotelVoucher_list = DB::table('guide_hotel_voucher_headers')
                                             ->join('users','users.id','=','guide_hotel_voucher_headers.user_id')
-                                            ->select('guide_hotel_voucher_headers.*','users.name as user_name')    
+                                            ->select('guide_hotel_voucher_headers.*','users.name as user_name')
                                             ->where('tour_id',$t_id)
                                             ->get();
 
@@ -1899,9 +1900,9 @@ public function guest_allocation($tour_id){
                                     ->join('tour_quot_guide_details','tour_quot_guide_details.tour_quot_guide_id','=','tour_quot_guides.id')
                                     ->join('guide_types','guide_types.id','=','tour_quot_guide_details.guide_type_id')
                                     ->join('languages','languages.id','=','tour_quot_guide_details.language_id')
-                                    ->leftJoin('guide_rooms','guide_rooms.id','=','tour_quot_guide_details.guide_room_id')                                
+                                    ->leftJoin('guide_rooms','guide_rooms.id','=','tour_quot_guide_details.guide_room_id')
                                     ->leftJoin('currencies','currencies.id','=','guide_rooms.currency_id')
-                                    ->where('tour_quot_guides.tour_id',$t_id)   
+                                    ->where('tour_quot_guides.tour_id',$t_id)
                                     ->select('tour_quot_guides.id','tour_quot_guides.tour_id','tour_quot_guides.tour_day','tour_quot_guides.lkr_rate',
                                                 'tour_quot_guide_details.pos','tour_quot_guide_details.has_room','tour_quot_guide_details.guide_room_id',
                                                     'tour_quot_guide_details.guide_fee','tour_quot_guide_details.guide_com','tour_quot_guide_details.room_rate',
@@ -1925,7 +1926,7 @@ $tourQoutGuide_gp =$tourQoutGuide->groupBy('tour_day');
     }
 
     public function save_guideDetails(Request $request){
-        
+
         if($request->ajax()){
 
             $tq_gdt_ID=$request->gt_gdt_id;
@@ -1933,14 +1934,14 @@ $tourQoutGuide_gp =$tourQoutGuide->groupBy('tour_day');
 
             try{
                 $check_details = GuideAllocation::where('tour_quot_guide_detail_id', $tq_gdt_ID)->select('supplier_id')->first();
-                    
+
                 if ($check_details != '') {
 
-                    return "You cannot add same supplier for one day";                      
+                    return "You cannot add same supplier for one day";
                 }
                 // else{
 
-                    $guide_allocate = new GuideAllocation;                        
+                    $guide_allocate = new GuideAllocation;
                     $guide_allocate->tour_quot_guide_detail_id=$tq_gdt_ID;
                     $guide_allocate->supplier_id=$sup_ID;
                     $guide_allocate->status=1;
@@ -1950,20 +1951,20 @@ $tourQoutGuide_gp =$tourQoutGuide->groupBy('tour_day');
                     $guide_hotel->tour_quot_guide_detail_id=$tq_gdt_ID;
                     $guide_hotel->status=1;
                     $guide_hotel->save();
-               
+
                     return json_encode('saved');
 
-                    
 
-                    
+
+
 
                 // }
-                        
+
             }
             catch(\Exception $ex){
-    
+
                 return json_encode("* Some field cannot be empty!, Please check before save");
-                
+
             }
         }
     }
@@ -1971,8 +1972,8 @@ $tourQoutGuide_gp =$tourQoutGuide->groupBy('tour_day');
     public function guide_allocate_store(Request $req)
     {
 
-        if($req->ajax()){ 
-           
+        if($req->ajax()){
+
 
             $tourID = $req->tourID;
             $tourQouteHeaderID = $req->qoutheaderId;
@@ -1989,7 +1990,7 @@ $tourQoutGuide_gp =$tourQoutGuide->groupBy('tour_day');
             // try{
                 //return json_encode($req->all());
 
-               
+
         if($guidedata_count!=0)
            {
                try{
@@ -1998,33 +1999,33 @@ $tourQoutGuide_gp =$tourQoutGuide->groupBy('tour_day');
                 $hasActiveVoucher = GuideAllocateVoucherHeader::where('supplier_id',$supid)
                                                                  ->where('tour_id',$tourID)
                                                                  ->where('status',1)->first();
-                                                                                        
+
                 if($hasActiveVoucher ==''){
                     try{
-                       
-                      
-                       
+
+
+
                         DB::beginTransaction();
-                        
+
                         $voucherNoUpdate = TrData::where('id',5)->select('id','tour_id')->first();
-                                 
+
                         $voucherNo =($voucherNoUpdate->tour_id)+1;
                         $voucherNoUpdate->tour_id = $voucherNo;
                         $voucherNoUpdate->save();
-                        
+
                         $newVoucher = new GuideAllocateVoucherHeader();
-                        
+
                         $newVoucher->guide_voucher_no = $voucherNo;
                         $newVoucher->tour_quotation_header_id = $tourQouteHeaderID;
                         $newVoucher->tour_id = $tourID;
-                        $newVoucher->vpos = $req->rowId_rg;                        
+                        $newVoucher->vpos = $req->rowId_rg;
                         $newVoucher->user_id = Auth::user()->id;
                         $newVoucher->supplier_id = $supid;
                         $newVoucher->confirmed_date = $conf_date;
                         $newVoucher->confirmed_by_name = $conf_by;
                         $newVoucher->rates = $rates;
                         $newVoucher->remarks = $remarks;
-                        
+
                         $newVoucher->status = 2;
                         $newVoucher->save();
 
@@ -2043,12 +2044,12 @@ $tourQoutGuide_gp =$tourQoutGuide->groupBy('tour_day');
 
                         }
 
-                        
+
                         DB::commit();
                         return json_encode('added');
 
                     }catch(Exception $ex)
-                    {   
+                    {
                         DB::rollBack();
                         return json_encode('* Some field cannot be empty!, Please check before save'.$ex);
                     }
@@ -2063,11 +2064,11 @@ $tourQoutGuide_gp =$tourQoutGuide->groupBy('tour_day');
             {
                 return json_encode("error");
             }
-            } 
+            }
 
-             
 
-            
+
+
         }
 
     }
@@ -2075,8 +2076,8 @@ $tourQoutGuide_gp =$tourQoutGuide->groupBy('tour_day');
     public function guide_hotel_store(Request $req)
     {
 
-        if($req->ajax()){ 
-           
+        if($req->ajax()){
+
 
             $tourID = $req->tourID;
             $tourQouteHeaderID = $req->qoutheaderId;
@@ -2093,7 +2094,7 @@ $tourQoutGuide_gp =$tourQoutGuide->groupBy('tour_day');
             // try{
                 //return json_encode($req->all());
 
-               
+
         if($guidedata_count!=0)
            {
                try{
@@ -2102,33 +2103,33 @@ $tourQoutGuide_gp =$tourQoutGuide->groupBy('tour_day');
                 $hasActiveVoucher = GuideHotelVoucherHeader::where('supplier_id',$supid)
                                                                  ->where('tour_id',$tourID)
                                                                  ->where('status',1)->first();
-                                                                                        
+
                 if($hasActiveVoucher ==''){
                     try{
-                       
-                      
-                       
+
+
+
                         DB::beginTransaction();
-                        
+
                         $voucherNoUpdate = TrData::where('id',6)->select('id','tour_id')->first();
-                                 
+
                         $voucherNo =($voucherNoUpdate->tour_id)+1;
                         $voucherNoUpdate->tour_id = $voucherNo;
                         $voucherNoUpdate->save();
-                        
+
                         $newVoucher = new GuideHotelVoucherHeader();
-                        
+
                         $newVoucher->guide_hotel_voucher_no = $voucherNo;
                         $newVoucher->tour_quotation_header_id = $tourQouteHeaderID;
                         $newVoucher->tour_id = $tourID;
-                        $newVoucher->vpos = $req->rowId_rg;                        
+                        $newVoucher->vpos = $req->rowId_rg;
                         $newVoucher->user_id = Auth::user()->id;
                         $newVoucher->supplier_id = $supid;
                         $newVoucher->confirmed_date = $conf_date;
                         $newVoucher->confirmed_by_name = $conf_by;
                         $newVoucher->rates = $rates;
                         $newVoucher->remarks = $remarks;
-                        
+
                         $newVoucher->status = 2;
                         $newVoucher->save();
 
@@ -2147,12 +2148,12 @@ $tourQoutGuide_gp =$tourQoutGuide->groupBy('tour_day');
 
                         }
 
-                        
+
                         DB::commit();
                         return json_encode('added');
 
                     }catch(Exception $ex)
-                    {   
+                    {
                         DB::rollBack();
                         return json_encode('* Some field cannot be empty!, Please check before save');
                     }
@@ -2167,11 +2168,11 @@ $tourQoutGuide_gp =$tourQoutGuide->groupBy('tour_day');
             {
                 return json_encode("error");
             }
-            } 
+            }
 
-             
 
-            
+
+
         }
 
     }
@@ -2180,7 +2181,7 @@ $tourQoutGuide_gp =$tourQoutGuide->groupBy('tour_day');
 
     public function guide_generate_voucher($id)
     {
-          
+
           try{
         $companyName = companyController::$companyName;
         $address = companyController::$Address_details;
@@ -2189,19 +2190,19 @@ $tourQoutGuide_gp =$tourQoutGuide->groupBy('tour_day');
 
         try{
 
-        
-        
+
+
         $voucherData = DB::table('guide_allocate_voucher_details')
             ->join('guide_allocations','guide_allocations.id','=','guide_allocate_voucher_details.guide_allocation_id')
             ->join('guide_allocate_voucher_headers','guide_allocate_voucher_headers.id','=','guide_allocate_voucher_details.guide_allocate_voucher_header_id')
             ->join('tour_quot_guide_details','tour_quot_guide_details.id','=','guide_allocations.tour_quot_guide_detail_id')
             ->join('tour_quot_guides','tour_quot_guide_details.tour_quot_guide_id','=','tour_quot_guides.id')
-            ->join('suppliers','guide_allocations.supplier_id','suppliers.id')                     
+            ->join('suppliers','guide_allocations.supplier_id','suppliers.id')
             ->where('guide_allocate_voucher_headers.guide_voucher_no',$id)
-            ->select('suppliers.sup_s_name','tour_quot_guide_details.guide_fee','tour_quot_guides.tour_date')        
+            ->select('suppliers.sup_s_name','tour_quot_guide_details.guide_fee','tour_quot_guides.tour_date')
             ->orderBy('tour_quot_guides.tour_day', 'ASC')
             ->get();
-    
+
         $voucherHead = DB::table('guide_allocate_voucher_headers')
                                     ->join('users','users.id','=','guide_allocate_voucher_headers.user_id')
                                     ->join('tour_quotation_headers','tour_quotation_headers.id','guide_allocate_voucher_headers.tour_quotation_header_id')
@@ -2211,29 +2212,29 @@ $tourQoutGuide_gp =$tourQoutGuide->groupBy('tour_day');
                                              'guide_allocate_voucher_headers.rates',
                                              'guide_allocate_voucher_headers.remarks')
                                     ->get();
-                                    
+
             //return $voucherData;
-    
+
                 $rowCount = $voucherData->count();
-    
-    
+
+
                 if($rowCount != 0){
-    
+
                     return view('tour_section_bookings.print_doc.guide_voucher',compact('companyName','address','telephone','web_mail','voucherData','voucherHead'));
                 }else{
                     return back();
                 }
-    
+
             }catch(Exception $ex){
-                
+
                 return back();
-    
+
             }
         }catch(\Exception $e){
-             
+
              return abort(404);
         }
-        
+
     }
 
     public function guide_hotel_voucher($id)
@@ -2246,7 +2247,7 @@ $tourQoutGuide_gp =$tourQoutGuide->groupBy('tour_day');
 
         try{
 
-        
+
             // $tableData = '';
         $voucherData = DB::table('guide_hotel_voucher_details')
             ->join('guide_hotel_reserves','guide_hotel_reserves.id','=','guide_hotel_voucher_details.guide_hotel_reserve_id')
@@ -2258,13 +2259,13 @@ $tourQoutGuide_gp =$tourQoutGuide->groupBy('tour_day');
             ->join('guide_room_types','guide_rooms.guide_room_type_id','=','guide_room_types.id')
             ->join('tour_quot_guides','tour_quot_guide_details.tour_quot_guide_id','=','tour_quot_guides.id')
             ->join('suppliers as hotel_sup','hotel_sup.id','=','guide_rooms.supplier_id')
-            ->join('suppliers as g_sup','guide_allocations.supplier_id','=','g_sup.id')                    
+            ->join('suppliers as g_sup','guide_allocations.supplier_id','=','g_sup.id')
             ->where('guide_hotel_voucher_headers.guide_hotel_voucher_no',$id)
             ->select('tour_quot_guide_details.room_rate','tour_quot_guides.tour_date','hotel_sup.sup_s_name as hotel_name','g_sup.sup_s_name as guide_name',
-                     'guide_types.g_type','guide_room_types.gr_types','guide_allocations.supplier_id')        
+                     'guide_types.g_type','guide_room_types.gr_types','guide_allocations.supplier_id')
             ->orderBy('tour_quot_guides.tour_day', 'ASC')
             ->get();
-    
+
         $voucherHead = DB::table('guide_hotel_voucher_headers')
                 ->join('users','users.id','=','guide_hotel_voucher_headers.user_id')
                 ->join('tour_quotation_headers','tour_quotation_headers.id','guide_hotel_voucher_headers.tour_quotation_header_id')
@@ -2279,32 +2280,32 @@ $tourQoutGuide_gp =$tourQoutGuide->groupBy('tour_day');
          $sup_guide=DB::table('guides')
                 ->join('suppliers','guides.supplier_id','=','suppliers.id')
                 ->join('guide_types','guide_types.id','=','guides.guide_type_id')
-                ->where('suppliers.type','Guide')                    
+                ->where('suppliers.type','Guide')
                 ->select('suppliers.sup_s_name','suppliers.id','guides.guide_type_id')
-                ->get();                   
-                                    
+                ->get();
+
             //return $voucherData;
-    
+
                 $rowCount = $voucherData->count();
-    
-    
+
+
                 if($rowCount != 0){
-    
+
                     return view('tour_section_bookings.print_doc.guide_hotel_voucher',compact('companyName','address','telephone','web_mail','voucherData','voucherHead','sup_guide'));
                 }else{
                     return back();
                 }
-    
+
             }catch(Exception $ex){
-                
+
                 return back();
-    
+
             }
         }catch(\Exception $e){
 
               return abort(404);
         }
-        
+
     }
     public function rooming_list_voucher()
     {
@@ -2313,21 +2314,21 @@ $tourQoutGuide_gp =$tourQoutGuide->groupBy('tour_day');
             $address = companyController::$Address_details;
             $telephone = companyController::$telephone_details;
             $web_mail = companyController::$web_mail_details;
-    
+
         return view('tour_section_bookings.print_doc.rooming_list',compact('companyName','address','telephone','web_mail'));
 
           }catch(\Exception $e){
-                
+
               return abort(404);
           }
-        
+
     }
 
 
     public function tour_booking_guest_allocate_index($t_id)
     {
           try{
-                 
+
                 // $guest_allocate_data=GuestAllocation::where('tour_id',$t_id)->get();
 
         $touer_qt_header=TourQuotationHeader::where('tour_id',$t_id)->select('tour_code','tour_id')->first();
@@ -2341,12 +2342,12 @@ $tourQoutGuide_gp =$tourQoutGuide->groupBy('tour_day');
         //return $guest_allocate_data;
 
        return view('tour_section_bookings.components.guest_index',compact('guest_allocate_data','touer_qt_header'));
-                      
+
           }catch(\Exception $e){
 
               return abort(404);
           }
-        
+
     }
 
     public function guests_allocation_delete_records(Request $request){
@@ -2359,10 +2360,10 @@ $tourQoutGuide_gp =$tourQoutGuide->groupBy('tour_day');
             return "Error";
         }
 
-        
+
 
     }
-    
+
     public function guests_allocation_livesearch(Request $request){
 
         if($request->ajax()){
@@ -2384,18 +2385,18 @@ $tourQoutGuide_gp =$tourQoutGuide->groupBy('tour_day');
 
                             $total_row = $data->count();
                             // return json_encode($total_row);
-                    
+
                 }
                 else{
                     $data=DB::table('guest_allocations')
                     ->join('tour_quotation_headers','tour_quotation_headers.tour_id','=','guest_allocations.tour_id')
                     ->select('tour_quotation_headers.title','guest_allocations.*')
                     ->where('tour_quotation_headers.tour_id',$_id)
-                     ->get(); 
+                     ->get();
                      $total_row = $data->count();
                     //  return json_encode($data);
                 }
-        
+
 
                 $output='';
              if($total_row > 0){
@@ -2403,12 +2404,12 @@ $tourQoutGuide_gp =$tourQoutGuide->groupBy('tour_day');
                 foreach($data as $dt)
                 {
                     $output.='
-                    
-                    
-                    <tr> 
-                            
+
+
+                    <tr>
+
                     <td style="text-align: center">'.$dt->id.'</td>
-                    
+
                     <td style="text-align: left">'.$dt->guest_name.' </td>
                     <td style="text-align: center">'.$dt->dob.' </td>
                     <td style="text-align: center">'.$dt->flight_no.' </td>
@@ -2417,16 +2418,16 @@ $tourQoutGuide_gp =$tourQoutGuide->groupBy('tour_day');
                     <td style="text-align: center">'.$dt->depature_date.' </td>
                     <td style="text-align: center">'.$dt->remarks.' </td>
                     <td style="text-align: center">
-                           
-                           
+
+
                            <a id="'.$dt->id.'" onclick="deleteAccept('.$dt->id.')"
                                          class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill"
                                          title="Edit View">
                                           <i class="la la-trash"></i>
-     
+
                                       </a>
-                                
-     
+
+
                              </td>
                 </tr>
 
@@ -2435,12 +2436,12 @@ $tourQoutGuide_gp =$tourQoutGuide->groupBy('tour_day');
 
              }else{
 
-                
+
                     $output='<tr>
                     <td align="center" colspan="9">No records found</td>
                     </tr>';
-    
-                    
+
+
              }
 
              $data=array(
@@ -2451,15 +2452,15 @@ $tourQoutGuide_gp =$tourQoutGuide->groupBy('tour_day');
 
             return json_encode($data);
 
-                
-                
-                
+
+
+
             }catch(Exception $ex){
                 return json_encode('Error');
             }
 
         }
-       
+
     }
 
     public function transport_addto_reserve_update(Request $request){
@@ -2474,7 +2475,7 @@ $tourQoutGuide_gp =$tourQoutGuide->groupBy('tour_day');
                     // return json_encode($trns_reqs);
                 if($trns_req_count != 0){
 
-                    
+
 
                     foreach($trns_reqs as $trns_req){
 
@@ -2488,7 +2489,7 @@ $tourQoutGuide_gp =$tourQoutGuide->groupBy('tour_day');
                     return json_encode('saved');
 
                 }
-                
+
             }catch(Exception $ex){
 
                 return json_encode($ex);
@@ -2497,24 +2498,24 @@ $tourQoutGuide_gp =$tourQoutGuide->groupBy('tour_day');
         }
 
     }
-    
+
     public function booking_pnl_generate()
-    {     
+    {
            try{
-               
+
             $companyName = companyController::$companyName;
             $address = companyController::$Address_details;
             $telephone = companyController::$telephone_details;
             $web_mail = companyController::$web_mail_details;
-    
-            
+
+
         return view('tour_section_bookings.print_doc.booking_pnl',compact('companyName','address','telephone','web_mail'));
-             
+
            }catch(\Exception $e){
 
                return abort(404);
            }
-        
+
     }
 
     public function agent_invoice_gen()
@@ -2525,14 +2526,14 @@ $tourQoutGuide_gp =$tourQoutGuide->groupBy('tour_day');
                 $address = companyController::$Address_details;
                 $telephone = companyController::$telephone_details;
                 $web_mail = companyController::$web_mail_details;
-                
+
                 return view('tour_section_bookings.print_doc.agent_invoice',compact('companyName','address','telephone','web_mail'));
 
             }catch(\Exception $e){
 
                  return abort(404);
             }
-        
+
     }
 
     public function agent_invoice_window($id){
@@ -2540,13 +2541,13 @@ $tourQoutGuide_gp =$tourQoutGuide->groupBy('tour_day');
     try{
 
         $tourQuotHeader = TourQuotationHeader::where('tour_id',$id)->first();
-        
+
     //     $accmd_pp_rate = $tourQuotHeader->pp_hotel_price;
     //     $accmd_ss_rate = $tourQuotHeader->pp_ss_price;
     //     $accmd_tplr_rate = $tourQuotHeader->pp_tpre_price;
     //     $accmd_qdr_rate = $tourQuotHeader->pp_qtre_price;
-        
-    //     $vat_rate=0;       
+
+    //     $vat_rate=0;
 
     //             $vat_rate_data = Tax::where('id',1)->where('status',1)->first();
 
@@ -2574,39 +2575,39 @@ $tourQoutGuide_gp =$tourQoutGuide->groupBy('tour_day');
 
     //     //Adult misc Rate
     //     $misc_Adpp_rate = ($misc_Adpp_rate/($tourQuotHeader->pax_adult+(($tourQuotHeader->pax_child)/2.00)));
-        
+
     //     //Child misc rate
     //     $misc_childpp_rate = $misc_Adpp_rate/2;
 
     //     //return $misc_childpp_rate;
 
-        
+
     //     $guide_pp_rate = ($tourQuotHeader->tot_guide_price)/$tourQuotHeader->pax_adult;
 
-        
+
 
     //     $total_ppAdultRate = ($accmd_pp_rate+$trp_pp_rate+$misc_Adpp_rate+$guide_pp_rate);
     //     $total_ppchildtRate = (($accmd_pp_rate/2)+$misc_childpp_rate+($trp_pp_rate));
 
     //    // return number_format($total_ppAdultRate,2).' Child:'.number_format($total_ppchildtRate,2);
-        
+
 
 
     //     $room_allocation = TourQuoteRoomAllocation::where('tour_id',$id)->first();
 
-        
 
-         return view('tour_section_bookings.invoice.new_invoice',compact('tourQuotHeader')); 
-         
+
+         return view('tour_section_bookings.invoice.new_invoice',compact('tourQuotHeader'));
+
 
     }catch(\Exception $e){
 
           return abort(404);
     }
- 
+
     }
 
-    
+
 
     public function gp_misc_reserve($id){
 
@@ -2614,7 +2615,7 @@ $tourQoutGuide_gp =$tourQoutGuide->groupBy('tour_day');
     }
 
     public function invoice_gen()
-    
+
     {
             try{
 
@@ -2622,14 +2623,53 @@ $tourQoutGuide_gp =$tourQoutGuide->groupBy('tour_day');
                 $address = companyController::$Address_details;
                 $telephone = companyController::$telephone_details;
                 $web_mail = companyController::$web_mail_details;
-                
+
                 return view('grid_dashboard',compact('companyName','address','telephone','web_mail'));
 
             }catch(\Exception $e){
 
                  return abort(404);
             }
-        
+
+    }
+
+    public function manage_confirm()
+    {
+        try{
+
+           $confirmedBookings = DB::table('tour_quotation_headers')
+                ->where('confirmed',1)
+                ->get();
+
+            // return $confirmedBookings;
+            return view('booking_section.confirm.manage_confirm',compact('confirmedBookings'));
+        }catch(\Exception $e){
+            return abort(404);
+        }
+    }
+
+    public  function  download_quotation($id)
+    {
+        $quotation = DB::table('tour_quotation_headers')
+        ->join('agents', 'agents.id', '=', 'tour_quotation_headers.agent_id')
+        ->where('tour_quotation_headers.id', $id)
+        ->first();
+
+    if (!$quotation) {
+        abort(404, 'Quotation not found.');
+    }
+
+    // Convert object to array to pass to the view
+    $data = ['quotation' => (array) $quotation];
+
+    // Load the Blade view and pass data
+    $pdf = PDF::loadView('booking_section.confirm.TourQuatationPdf', $data);
+
+    // Define PDF file name
+    $fileName = 'quotation_' . $id . '.pdf';
+
+    // Stream or download the PDF
+    return $pdf->download($fileName);
     }
 
 }

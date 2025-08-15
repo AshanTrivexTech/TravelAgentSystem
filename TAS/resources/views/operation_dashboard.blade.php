@@ -136,7 +136,7 @@
                                                                 
                                         </a>  
                 
-                        <a href=""  class="m-portlet btn">
+                        <a href="{{ Route('manage_confirm') }}"  class="m-portlet btn">
                                         <div class="m-portlet__body" style="padding:5px;">
                                             <div class="m-widget26">
                                                     <h6 class="card-title text-center text-warning">Confirmed<br>Bookings</h6>
