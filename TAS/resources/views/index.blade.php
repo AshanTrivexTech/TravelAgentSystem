@@ -1,0 +1,3 @@
+hellow
+
+a is = :   {{$a}}

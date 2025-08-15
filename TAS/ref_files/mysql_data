@@ -1,0 +1,405 @@
+-- phpMyAdmin SQL Dump
+-- version 4.8.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Generation Time: Aug 17, 2018 at 09:30 AM
+-- Server version: 10.1.33-MariaDB
+-- PHP Version: 7.2.6
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `travel_agent`
+--
+
+--
+-- Dumping data for table `agents`
+--
+
+INSERT INTO `agents` (`id`, `market_id`, `ag_code`, `ag_name`, `address`, `remarks`, `created_at`, `updated_at`) VALUES
+(1, 1, 'GFT', 'Grand FT Tour', 'kjasdkjhsajkdfsajk', 'adsafsdf', '2018-08-06 04:06:27', '2018-08-06 04:06:27');
+
+--
+-- Dumping data for table `agent_contacts`
+--
+
+INSERT INTO `agent_contacts` (`id`, `agent_id`, `type`, `contact`, `created_at`, `updated_at`) VALUES
+(1, 1, 'Email_A', 'user@gmail.com', NULL, NULL),
+(2, 1, 'Email_B', 'user@gmail.com', NULL, NULL),
+(3, 1, 'Email_C', 'user@gmail.com', NULL, NULL),
+(4, 1, 'Fax', '0112555455', NULL, NULL),
+(5, 1, 'Tel', '0122545455', NULL, NULL);
+
+--
+-- Dumping data for table `branches`
+--
+
+INSERT INTO `branches` (`id`, `company_id`, `country_id`, `City_name`, `branch_code`, `branch_name`, `branch_address`, `contact_details`, `description`, `status`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 'Colombo', 'CMB', 'Colombo BR', 'Colombo 8', 'test contact details', 'Description test', 1, NULL, NULL);
+
+--
+-- Dumping data for table `cities`
+--
+
+INSERT INTO `cities` (`id`, `district_id`, `city_name`, `city_code`, `created_at`, `updated_at`) VALUES
+(1, 1, 'Piliyandala', 'PLY', NULL, NULL),
+(2, 1, 'Nugegoda', 'NGGD', NULL, NULL),
+(3, 2, 'Ja-Ela', 'JEL', '2018-08-07 01:31:50', '2018-08-07 01:31:50');
+
+--
+-- Dumping data for table `companies`
+--
+
+INSERT INTO `companies` (`id`, `company_code`, `company_name`, `company_address`, `email`, `tel`, `vat_rate`, `created_at`, `updated_at`) VALUES
+(1, 'ATQT', 'Antiquity', 'Colombo 8', 'use@gmail.com', '012245256', '15', NULL, NULL);
+
+--
+-- Dumping data for table `countries`
+--
+
+INSERT INTO `countries` (`id`, `c_code`, `country_name`, `created_at`, `updated_at`) VALUES
+(1, 'LK', 'Sri lanka', NULL, NULL),
+(2, 'US', 'USA', NULL, NULL);
+
+--
+-- Dumping data for table `currencies`
+--
+
+INSERT INTO `currencies` (`id`, `code`, `type`, `usd_rate`, `created_at`, `updated_at`) VALUES
+(1, 'USD', 'USD', 1, '2018-08-06 04:04:39', '2018-08-06 04:04:39');
+
+--
+-- Dumping data for table `distances`
+--
+
+INSERT INTO `distances` (`id`, `frm`, `to`, `distance`, `created_at`, `updated_at`) VALUES
+(21, 4, 5, 100, NULL, NULL),
+(22, 4, 6, 140, NULL, NULL),
+(23, 6, 5, 180, NULL, NULL);
+
+--
+-- Dumping data for table `districts`
+--
+
+INSERT INTO `districts` (`id`, `dist_name`, `code`, `country_id`, `created_at`, `updated_at`) VALUES
+(1, 'Colombo', 'CMB', 1, NULL, NULL),
+(2, 'Gampaha', 'GMP', 1, NULL, NULL);
+
+--
+-- Dumping data for table `guides`
+--
+
+INSERT INTO `guides` (`id`, `supplier_id`, `guide_type_id`, `guide_name`, `created_at`, `updated_at`) VALUES
+(1, 20, 1, 'Sanath Dayasiri', '2018-08-14 05:57:18', '2018-08-14 05:57:18'),
+(2, 21, 1, 'wawa', '2018-08-14 06:10:13', '2018-08-14 06:10:13');
+
+--
+-- Dumping data for table `guide_languages`
+--
+
+INSERT INTO `guide_languages` (`id`, `guide_id`, `language_id`, `amount`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 450, '2018-08-14 05:57:18', '2018-08-14 05:57:18'),
+(2, 2, 1, 1230, '2018-08-14 06:10:13', '2018-08-14 06:10:13');
+
+--
+-- Dumping data for table `guide_types`
+--
+
+INSERT INTO `guide_types` (`id`, `g_type`, `created_at`, `updated_at`) VALUES
+(1, 'national', NULL, NULL);
+
+--
+-- Dumping data for table `hotels`
+--
+
+INSERT INTO `hotels` (`id`, `supplier_id`, `hotel_type_id`, `desc`, `postal_code`, `hotel_group_id`, `star_rate`, `web_url`, `created_at`, `updated_at`) VALUES
+(1, 4, 1, 'kjshdkjas', 12132, 1, 3, 'https://www.thespringvillakandy.lk', '2018-08-07 23:04:58', '2018-08-11 05:46:20'),
+(3, 15, 1, 'Very Nice', 14500, 2, 5, 'www.amayahill.com', '2018-08-11 05:42:01', '2018-08-11 05:42:01'),
+(4, 16, 2, 'Very nice', 13400, 1, 5, 'www.tag.com', '2018-08-11 05:45:47', '2018-08-11 05:45:47'),
+(5, 17, 2, 'very nice', 15600, 2, 5, 'www.CG.com', '2018-08-11 05:47:37', '2018-08-11 05:47:37'),
+(6, 18, 2, 'Hikz', 15324, 2, 5, 'www.hikz.com', '2018-08-11 05:49:11', '2018-08-11 05:49:11');
+
+--
+-- Dumping data for table `hotel_groups`
+--
+
+INSERT INTO `hotel_groups` (`id`, `hotel_gp_name`, `group_code`, `created_at`, `updated_at`) VALUES
+(1, 'None', 'none', NULL, NULL),
+(2, 'Jetwing Group', 'JTWG', NULL, NULL);
+
+--
+-- Dumping data for table `hotel_packages`
+--
+
+INSERT INTO `hotel_packages` (`id`, `supplier_id`, `currency_id`, `market_id`, `meal_plane_id`, `room_type_id`, `Package_name`, `extra_bed_charge`, `child_rate`, `SGL`, `DBL`, `TBL`, `QBL`, `from_date`, `to_date`, `status`, `created_at`, `updated_at`) VALUES
+(1, 4, 1, 1, 1, 1, 'HERITANCE NEGOMBO', 100, 50, 185, 210, 285, 340, '0000-00-00', '0000-00-00', 0, '2018-08-11 05:53:57', '2018-08-11 05:53:57'),
+(2, 4, 1, 1, 2, 2, 'December to January', 70, 50, 225, 290, 395, 470, '0000-00-00', '0000-00-00', 0, '2018-08-11 05:58:36', '2018-08-11 05:58:36'),
+(3, 15, 1, 1, 1, 1, 'January to march', 80, 50, 195, 220, 300, 360, '0000-00-00', '0000-00-00', 0, '2018-08-11 06:00:23', '2018-08-11 06:00:23'),
+(4, 4, 1, 1, 2, 2, 'April', 60, 40, 170, 190, 260, 310, '0000-00-00', '0000-00-00', 0, '2018-08-11 06:01:34', '2018-08-11 06:01:34'),
+(5, 16, 1, 1, 3, 1, 'november to december', 90, 50, 150, 170, 205, 275, '0000-00-00', '0000-00-00', 0, '2018-08-11 06:03:19', '2018-08-11 06:03:19'),
+(6, 16, 1, 1, 2, 2, 'december to january', 120, 70, 255, 290, 395, 470, '0000-00-00', '0000-00-00', 0, '2018-08-11 06:04:19', '2018-08-11 06:04:19'),
+(7, 17, 1, 1, 1, 3, 'january to march', 70, 45, 160, 180, 245, 295, '0000-00-00', '0000-00-00', 0, '2018-08-11 06:05:10', '2018-08-11 06:05:10'),
+(8, 17, 1, 1, 4, 2, 'Aprill sad', 120, 60, 140, 155, 210, 255, '0000-00-00', '0000-00-00', 0, '2018-08-11 06:06:05', '2018-08-11 06:06:05'),
+(9, 18, 1, 1, 1, 1, 'november to december', 100, 80, 185, 210, 285, 340, '0000-00-00', '0000-00-00', 0, '2018-08-11 06:07:08', '2018-08-11 06:07:08'),
+(10, 18, 1, 1, 2, 1, 'december to january', 90, 45, 255, 290, 395, 470, '0000-00-00', '0000-00-00', 0, '2018-08-11 06:08:12', '2018-08-11 06:08:12');
+
+--
+-- Dumping data for table `hotel_star_rates`
+--
+
+INSERT INTO `hotel_star_rates` (`id`, `star_rate`, `created_at`, `updated_at`) VALUES
+(1, 5, NULL, NULL),
+(2, 4, NULL, NULL);
+
+--
+-- Dumping data for table `hotel_types`
+--
+
+INSERT INTO `hotel_types` (`id`, `type_name`, `created_at`, `updated_at`) VALUES
+(1, 'Villa', NULL, NULL),
+(2, 'Resort', NULL, NULL);
+
+--
+-- Dumping data for table `languages`
+--
+
+INSERT INTO `languages` (`id`, `lang_name`, `created_at`, `updated_at`) VALUES
+(1, 'German', NULL, NULL),
+(2, 'English', NULL, NULL);
+
+--
+-- Dumping data for table `locations`
+--
+
+INSERT INTO `locations` (`id`, `country_id`, `district_id`, `city_id`, `location_name`, `location_code`, `long_name`, `geo_name`, `narration`, `short_des`, `status`, `created_at`, `updated_at`) VALUES
+(4, 1, 1, 1, 'Colombo', 'CMB', 'aaa', 'aaa', 'asdsa', 'asdsada', 1, '2018-08-08 00:30:11', '2018-08-08 00:33:00'),
+(5, 1, 1, 1, 'Kandy', 'KDD', 'asds', 'sad', 'sadsa', 'asds', 1, '2018-08-08 00:30:37', '2018-08-08 00:33:39'),
+(6, 1, 2, 3, 'Galle', 'GLL', 'asd', 'sdsa', 'asda', 'sdasd', 1, '2018-08-08 00:31:00', '2018-08-08 00:33:39');
+
+--
+-- Dumping data for table `markets`
+--
+
+INSERT INTO `markets` (`id`, `market_name`, `m_code`, `currency_id`, `created_at`, `updated_at`) VALUES
+(1, 'UK Market', 'UK', 1, '2018-08-06 04:04:54', '2018-08-06 04:04:54');
+
+--
+-- Dumping data for table `meal_planes`
+--
+
+INSERT INTO `meal_planes` (`id`, `meal_plane`, `created_at`, `updated_at`) VALUES
+(1, 'BB', NULL, NULL),
+(2, 'HB', NULL, NULL),
+(3, 'FB', NULL, NULL),
+(4, 'Room only', NULL, NULL);
+
+--
+-- Dumping data for table `miscellanies`
+--
+
+INSERT INTO `miscellanies` (`id`, `supplier_id`, `misc_type_id`, `misc_categorie_id`, `misce_title`, `Rate`, `created_at`, `updated_at`) VALUES
+(1, 19, 1, 1, 'Water', 125, '2018-08-14 05:50:17', '2018-08-14 05:50:17');
+
+--
+-- Dumping data for table `misc_categories`
+--
+
+INSERT INTO `misc_categories` (`id`, `category`, `mc_pax`, `created_at`, `updated_at`) VALUES
+(1, 'Bottels', 1, '2018-08-14 05:47:14', '2018-08-14 05:47:14');
+
+--
+-- Dumping data for table `misc_types`
+--
+
+INSERT INTO `misc_types` (`id`, `type`, `created_at`, `updated_at`) VALUES
+(1, 'Water', '2018-08-14 05:46:48', '2018-08-14 05:46:48');
+
+--
+-- Dumping data for table `package_periods`
+--
+
+INSERT INTO `package_periods` (`id`, `hotel_package_id`, `title`, `fr_date`, `to_date`, `created_at`, `updated_at`) VALUES
+(1, 1, 'Xmas Week', '2018-12-16', '2018-12-29', '2018-08-11 04:53:54', '2018-08-11 04:53:54'),
+(2, 2, 'Summer Season', '2018-08-15', '2018-09-08', '2018-08-11 04:54:40', '2018-08-11 04:54:40'),
+(3, 3, 'Winter', '2018-08-23', '2019-04-13', '2018-08-11 04:55:08', '2018-08-11 04:55:08'),
+(4, 4, 'April', '2018-08-10', '2018-09-28', NULL, NULL),
+(5, 5, 'november to december', '2018-08-01', '2018-08-16', NULL, NULL),
+(6, 6, 'december to january', '2018-11-29', '2018-12-31', NULL, NULL),
+(7, 7, 'january to march', '2019-01-01', '2019-03-21', NULL, NULL),
+(8, 8, 'Aprill sad', '2019-01-01', '2019-04-01', NULL, NULL),
+(9, 9, 'november to december', '2018-12-14', '2019-01-18', NULL, NULL),
+(10, 10, 'december to january', '2018-08-10', '2018-09-28', NULL, NULL);
+
+--
+-- Dumping data for table `package_period_types`
+--
+
+INSERT INTO `package_period_types` (`id`, `type`, `created_at`, `updated_at`) VALUES
+(1, 'All', NULL, NULL),
+(2, 'Date Range', NULL, NULL);
+
+--
+-- Dumping data for table `quotation_codes`
+--
+
+INSERT INTO `quotation_codes` (`id`, `agent_id`, `code_year`, `code_no`, `created_at`, `updated_at`) VALUES
+(1, 1, 2018, 2, '2018-08-06 04:11:43', '2018-08-14 05:38:21');
+
+--
+-- Dumping data for table `room_types`
+--
+
+INSERT INTO `room_types` (`id`, `r_type`, `created_at`, `updated_at`) VALUES
+(1, 'Delux', NULL, NULL),
+(2, 'Luxry', NULL, NULL),
+(3, 'Superior', NULL, NULL);
+
+--
+-- Dumping data for table `suppliers`
+--
+
+INSERT INTO `suppliers` (`id`, `code`, `sup_s_name`, `sup_name`, `type`, `address`, `city_id`, `district_id`, `country_id`, `status`, `created_at`, `updated_at`) VALUES
+(4, 'TAG', 'The Spring Villas Kandy', 'The Spring Villas Kandy', 'Hotel', '4554asdas', 1, 1, 1, 0, '2018-08-07 23:04:58', '2018-08-11 05:42:56'),
+(14, 'TGH', 'Nuwan Transport', 'Nuwan Transport', 'Vehicle', 'asdsadada', 3, 2, 1, 1, '2018-08-10 00:18:17', '2018-08-10 00:18:17'),
+(15, 'AMH', 'Amaya hill-Kandy', 'Amaya hill-Kandy', 'Hotel', 'Colombo', 1, 1, 1, 1, '2018-08-11 05:42:01', '2018-08-11 05:42:01'),
+(16, 'TNG', 'Tangarine', 'Tangarine', 'Hotel', 'Waskaduwa', 2, 1, 1, 1, '2018-08-11 05:45:47', '2018-08-11 05:45:47'),
+(17, 'CG', 'Cinemon Grand', 'Cinemon Grand', 'Hotel', 'Colombo', 1, 1, 1, 1, '2018-08-11 05:47:37', '2018-08-11 05:47:37'),
+(18, 'HCG', 'Hikkaduwa Coral Garden', 'Hikkaduwa Coral Garden', 'Hotel', 'Hikkaduwa', 2, 1, 1, 1, '2018-08-11 05:49:11', '2018-08-11 05:49:11'),
+(19, 'WEW', NULL, 'Water Bottel', 'Misc', 'asl;kdsam', NULL, NULL, NULL, 1, '2018-08-14 05:50:17', '2018-08-14 05:50:17'),
+(20, 'GRM001', NULL, 'Sanath Dayasiri', 'Guide', 'awsa', 1, 1, 1, 1, '2018-08-14 05:57:18', '2018-08-14 05:57:18'),
+(21, 'WS', NULL, 'wawa', 'Guide', NULL, 1, 1, 1, 1, '2018-08-14 06:10:13', '2018-08-14 06:10:13');
+
+--
+-- Dumping data for table `sup_contact_details`
+--
+
+INSERT INTO `sup_contact_details` (`id`, `supplier_id`, `type`, `contact`, `created_at`, `updated_at`) VALUES
+(1, 4, 'Email_A', 'user@gmail.com', NULL, '2018-08-11 05:46:20'),
+(2, 4, 'Email_B', 'user@gmail.com', NULL, '2018-08-11 05:46:20'),
+(3, 4, 'Email_C', 'user@gmail.com', NULL, '2018-08-11 05:46:20'),
+(4, 4, 'Fax', '2312321111', NULL, '2018-08-11 05:46:20'),
+(5, 4, 'Tel', '3244534343', NULL, '2018-08-11 05:46:20'),
+(11, 14, 'Email_A', '32432454675745', NULL, NULL),
+(12, 14, 'Tel', '2131232134', NULL, NULL),
+(13, 15, 'Email_A', 'amayahill@gmail.com', NULL, NULL),
+(14, 15, 'Email_B', NULL, NULL, NULL),
+(15, 15, 'Email_C', NULL, NULL, NULL),
+(16, 15, 'Fax', NULL, NULL, NULL),
+(17, 15, 'Tel', NULL, NULL, NULL),
+(18, 16, 'Email_A', 'tag@gmail.com', NULL, NULL),
+(19, 16, 'Email_B', NULL, NULL, NULL),
+(20, 16, 'Email_C', NULL, NULL, NULL),
+(21, 16, 'Fax', NULL, NULL, NULL),
+(22, 16, 'Tel', NULL, NULL, NULL),
+(23, 17, 'Email_A', 'cg@gmail.com', NULL, NULL),
+(24, 17, 'Email_B', NULL, NULL, NULL),
+(25, 17, 'Email_C', NULL, NULL, NULL),
+(26, 17, 'Fax', NULL, NULL, NULL),
+(27, 17, 'Tel', NULL, NULL, NULL),
+(28, 18, 'Email_A', 'hikz@gmail.com', NULL, NULL),
+(29, 18, 'Email_B', NULL, NULL, NULL),
+(30, 18, 'Email_C', NULL, NULL, NULL),
+(31, 18, 'Fax', NULL, NULL, NULL),
+(32, 18, 'Tel', NULL, NULL, NULL),
+(33, 19, 'Email_A', 'user@gmail.com', NULL, NULL),
+(34, 19, 'Mobile', '0125545585', NULL, NULL),
+(35, 20, 'Email_A', 'user@gmail.com', NULL, NULL),
+(36, 20, 'Mobile', '5454545432', NULL, NULL),
+(37, 20, 'Tel', '5545555522', NULL, NULL),
+(38, 21, 'Email_A', 'user@gmail.com', NULL, NULL),
+(39, 21, 'Mobile', NULL, NULL, NULL),
+(40, 21, 'Tel', NULL, NULL, NULL);
+
+--
+-- Dumping data for table `tour_quotation_headers`
+--
+
+INSERT INTO `tour_quotation_headers` (`id`, `tour_id`, `tour_code`, `market_id`, `agent_id`, `branch_id`, `version_id`, `tour_type`, `title`, `frm_date`, `to_date`, `Days`, `pax_adult`, `pax_child`, `remarks`, `currency_id`, `vat_rate`, `millage`, `tot_hotel_price`, `tot_trp_price`, `tot_misc_price`, `pp_price`, `pp_ss_price`, `pp_tpre_price`, `pp_qtre_price`, `com_rate`, `nbt_rate`, `promotion`, `confirmed`, `status`, `created_at`, `updated_at`) VALUES
+(1, 2, 'UK/GFT/CMB/082018-1-V1', 1, 1, 1, 1, 1, 'Familiy Tour 2018', '2018-08-21', '2018-08-29', 8, 2, 1, 'test remarks', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 15, NULL, 0, 0, 1, '2018-08-06 04:11:43', '2018-08-06 04:11:43'),
+(2, 3, 'UK/GFT/CMB/082018-2-V1', 1, 1, 1, 1, 2, 'asdsadf', '2018-08-31', '2018-09-07', 7, 3, 1, 'asdsdgfd', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 12, NULL, 0, 0, 1, '2018-08-14 05:38:21', '2018-08-14 05:38:21');
+
+--
+-- Dumping data for table `tour_quot_distances`
+--
+
+INSERT INTO `tour_quot_distances` (`id`, `tour_quot_location_id`, `tour_id`, `pos`, `location_id`, `lc_name`, `lc_code`, `kms`, `created_at`, `updated_at`) VALUES
+(105, 166, 2, 1, 4, 'Colombo', 'CMB', 0, '2018-08-10 05:00:52', '2018-08-10 05:00:52'),
+(106, 166, 2, 2, 5, 'Kandy', 'KDD', 100, '2018-08-10 05:00:52', '2018-08-10 05:00:52'),
+(107, 166, 2, 3, 4, 'Colombo', 'CMB', 100, '2018-08-10 05:00:52', '2018-08-10 05:00:52'),
+(108, 166, 2, 4, 5, 'Kandy', 'KDD', 100, '2018-08-10 05:00:52', '2018-08-10 05:00:52'),
+(109, 166, 2, 5, 4, 'Colombo', 'CMB', 100, '2018-08-10 05:00:52', '2018-08-10 05:00:52'),
+(110, 166, 2, 6, 6, 'Galle', 'GLL', 140, '2018-08-10 05:00:52', '2018-08-10 05:00:52'),
+(111, 167, 2, 1, 4, 'Colombo', 'CMB', 0, '2018-08-10 05:00:52', '2018-08-10 05:00:52'),
+(112, 167, 2, 2, 5, 'Kandy', 'KDD', 100, '2018-08-10 05:00:52', '2018-08-10 05:00:52'),
+(113, 167, 2, 3, 4, 'Colombo', 'CMB', 100, '2018-08-10 05:00:52', '2018-08-10 05:00:52'),
+(114, 169, 2, 1, 5, 'Kandy', 'KDD', 0, '2018-08-10 05:00:52', '2018-08-10 05:00:52');
+
+--
+-- Dumping data for table `tour_quot_locations`
+--
+
+INSERT INTO `tour_quot_locations` (`id`, `tour_quotation_header_id`, `tour_id`, `tour_date`, `tour_day`, `ttkms`, `created_at`, `updated_at`) VALUES
+(166, 1, 2, '2018-08-21', 1, 540, '2018-08-10 05:00:52', '2018-08-10 05:00:52'),
+(167, 1, 2, '2018-08-22', 2, 200, '2018-08-10 05:00:52', '2018-08-10 05:00:52'),
+(168, 1, 2, '2018-08-23', 3, 0, '2018-08-10 05:00:52', '2018-08-10 05:00:52'),
+(169, 1, 2, '2018-08-24', 4, 0, '2018-08-10 05:00:52', '2018-08-10 05:00:52'),
+(170, 1, 2, '2018-08-25', 5, 0, '2018-08-10 05:00:52', '2018-08-10 05:00:52'),
+(171, 1, 2, '2018-08-26', 6, 0, '2018-08-10 05:00:52', '2018-08-10 05:00:52'),
+(172, 1, 2, '2018-08-27', 7, 0, '2018-08-10 05:00:52', '2018-08-10 05:00:52'),
+(173, 1, 2, '2018-08-28', 8, 0, '2018-08-10 05:00:52', '2018-08-10 05:00:52');
+
+--
+-- Dumping data for table `tour_types`
+--
+
+INSERT INTO `tour_types` (`id`, `tour_type_name`, `created_at`, `updated_at`) VALUES
+(1, 'Round Tour', NULL, NULL),
+(2, 'Hotel only', NULL, NULL),
+(3, 'Transport Only', NULL, NULL);
+
+--
+-- Dumping data for table `tr_datas`
+--
+
+INSERT INTO `tr_datas` (`id`, `tour_id`, `created_at`, `updated_at`) VALUES
+(1, 3, NULL, '2018-08-14 05:38:21');
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `name`, `email`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
+(1, 'admin', 'user@gmail.com', '$2y$10$kL5HMEvEhZ1hLPchNvCIE.pN3Ud6Knq0qwhAhiUjI2QKdbpI0nMv.', '9sTiiv9emOv5RjpWfUtwQorIHiz2KpjLIf59M6ibynLGdylr7MXJpjjU1fzt', '2018-08-13 22:05:48', '2018-08-13 22:05:48'),
+(2, 'Nuwan', 'nuwan@gmail.com', '$2y$10$W/qVASxEtU6QLlbr32HZ/.V8WUuk4iduvAbcA2tbDoXT7sbCvs.UG', 'oyK9qryBVv0dB6VWZZJxS0MUcyfWmb1kkTKRDl7b4oT4F86qBOgv3Dfdldlb', '2018-08-15 01:08:08', '2018-08-15 01:08:08'),
+(3, 'ashan', 'ashan@gmail.com', '$2y$10$B.nSyKT5LTjL2brwbe4weOySqse2UdHt5vGm0Vu1q8y1mWvvCxI.S', NULL, '2018-08-15 03:37:08', '2018-08-15 03:37:08'),
+(4, 'admin', 'admin@ad.com', '$2y$10$pENUZfzTk6y5JIqOdUJ9Le2LQP.e4w2JnwnS3BoqCAY3Gics/8iW2', NULL, '2018-08-15 22:34:37', '2018-08-15 22:34:37');
+
+--
+-- Dumping data for table `vehicles`
+--
+
+INSERT INTO `vehicles` (`id`, `title`, `supplier_id`, `vehicle_type_id`, `reg_no`, `licence_exp_date`, `insurance_exp_date`, `mf_year`, `reg_year`, `remarks`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Toyota KDH', 14, 2, 'PI-2585', '2018-08-16', '2018-08-28', 2012, 2013, 'asdada', 1, '2018-08-10 00:31:10', '2018-08-10 00:31:10');
+
+--
+-- Dumping data for table `vehicle_types`
+--
+
+INSERT INTO `vehicle_types` (`id`, `no_of_seats`, `rate_per_km`, `type`, `created_at`, `updated_at`) VALUES
+(1, 4, 32, 'Car', '2018-08-10 00:19:56', '2018-08-10 00:19:56'),
+(2, 10, 42, 'KDH', '2018-08-10 00:20:10', '2018-08-10 00:20:10');
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

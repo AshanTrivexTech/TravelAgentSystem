@@ -1,0 +1,39 @@
+
+        
+
+            $misc_views=Db::table('tour_quot_miscs')
+                        ->join('misc_categories','misc_categories.id','=','tour_quot_miscs.misc_categorie_id')
+                        
+                        ->select('misc_categories.Rate','misc_categories.mc_pax','misc_categories.category',
+                        'tour_quot_miscs.qty','tour_quot_miscs.totlkr','tour_quot_miscs.id','tour_quot_miscs.pos as t_pos',
+                        'tour_quot_miscs.tour_id','tour_quot_miscs.misc_categorie_id')
+                        ->where('tour_quot_miscs.tour_id',$id)
+                        ->orderBy('tour_quot_miscs.pos')
+                        ->get();
+            $tourQuotHeader = TourQuotationHeader::where('tour_id',$id)->where('confirmed',1)->first();
+
+
+                    //    return $misc_views;
+                   
+        // $supplier_data=Supplier::where('type','Misc')->select('id','sup_s_name')->get();
+        $supplier_data=DB::table('suppliers')
+                        ->join('miscellanies','miscellanies.supplier_id','suppliers.id')
+                        ->where('suppliers.type','Misc')
+                        ->select('miscellanies.misc_categorie_id','suppliers.id','suppliers.sup_s_name')
+                        ->get();
+            // return $supplier_data;
+
+        $mis_data_dt=DB::table('tour_quot_miscs')
+                ->join('reservation_miscs','reservation_miscs.tour_quote_misc_id','=','tour_quot_miscs.id') 
+                ->where('tour_quot_miscs.tour_id',$id)
+                ->select('tour_quot_miscs.pos','reservation_miscs.*')
+                ->get();
+            // return $mis_data_dt;
+           
+               
+                   
+               
+      
+        return view('tour_section_bookings.components.miscellanies_view',compact('misc_views','supplier_data','mis_data_dt','tourQuotHeader'));
+
+   

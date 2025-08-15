@@ -1,0 +1,197 @@
+-- phpMyAdmin SQL Dump
+-- version 4.8.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Generation Time: Aug 29, 2018 at 07:11 AM
+-- Server version: 10.1.33-MariaDB
+-- PHP Version: 7.2.6
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `travel_agent`
+--
+
+--
+-- Dumping data for table `privilege_actions`
+--
+
+INSERT INTO `privilege_actions` (`id`, `action_name`) VALUES
+(1, 'Read Only'),
+(2, 'Modify'),
+(3, 'Full Access');
+
+
+--
+-- Dumping data for table `privilege_lists`
+
+INSERT INTO `privilege_lists` (`id`, `privilege_action_id`, `privilege_section_id`, `description`, `status`) VALUES
+(1, 1, 1, '', 1),
+(2, 2, 1, '', 1),
+(3, 3, 1, '', 1),
+(4, 1, 2, '', 1),
+(5, 2, 2, '', 1),
+(6, 3, 2, '', 1),
+(7, 1, 3, '', 1),
+(8, 2, 3, '', 1),
+(9, 3, 3, '', 1),
+(10, 1, 4, '', 1),
+(11, 2, 4, '', 1),
+(12, 3, 4, '', 1),
+(13, 1, 5, '', 1),
+(14, 2, 5, '', 1),
+(15, 3, 5, '', 1),
+(16, 1, 6, '', 1),
+(17, 2, 6, '', 1),
+(18, 3, 6, '', 1),
+(19, 1, 7, '', 1),
+(20, 2, 7, '', 1),
+(21, 3, 7, '', 1),
+(22, 1, 8, '', 1),
+(23, 2, 8, '', 1),
+(24, 3, 8, '', 1),
+(25, 1, 9, '', 1),
+(26, 2, 9, '', 1),
+(27, 3, 9, '', 1),
+(28, 1, 10, '', 1),
+(29, 2, 10, '', 1),
+(30, 3, 10, '', 1),
+(31, 1, 11, '', 1),
+(32, 2, 11, '', 1),
+(33, 3, 11, '', 1),
+(34, 1, 12, '', 1),
+(35, 2, 12, '', 1),
+(36, 3, 12, '', 1),
+(37, 1, 13, '', 1),
+(38, 2, 13, '', 1),
+(39, 3, 13, '', 1),
+(40, 1, 14, '', 1),
+(41, 2, 14, '', 1),
+(42, 3, 14, '', 1),
+(43, 1, 15, '', 1),
+(44, 2, 15, '', 1),
+(45, 3, 15, '', 1),
+(46, 1, 16, '', 1),
+(47, 2, 16, '', 1),
+(48, 3, 16, '', 1),
+(49, 1, 17, '', 1),
+(50, 2, 17, '', 1),
+(51, 3, 17, '', 1),
+(52, 1, 18, '', 1),
+(53, 2, 18, '', 1),
+(54, 3, 18, '', 1),
+(55, 1, 19, '', 1),
+(56, 2, 19, '', 1),
+(57, 3, 19, '', 1),
+(58, 1, 20, '', 1),
+(59, 2, 20, '', 1),
+(60, 3, 20, '', 1),
+(61, 1, 21, '', 1),
+(62, 2, 21, '', 1),
+(63, 3, 21, '', 1),
+(64, 1, 22, '', 1),
+(65, 2, 22, '', 1),
+(66, 3, 22, '', 1),
+(67, 1, 23, '', 1),
+(68, 2, 23, '', 1),
+(69, 3, 23, '', 1),
+(70, 1, 24, '', 1),
+(71, 2, 24, '', 1),
+(72, 3, 24, '', 1),
+(73, 1, 25, '', 1),
+(74, 2, 25, '', 1),
+(75, 3, 25, '', 1),
+(76, 1, 26, '', 1),
+(77, 2, 26, '', 1),
+(78, 3, 26, '', 1),
+(79, 1, 27, '', 1),
+(80, 2, 27, '', 1),
+(81, 3, 27, '', 1);
+
+--
+-- Dumping data for table `privilege_sections`
+--
+
+
+
+INSERT INTO `user_privileges` (`id`, `user_id`, `user_type_id`, `privilege_list_id`, `status`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 1, 1, NULL, NULL),
+(2, 1, 1, 4, 1, NULL, NULL),
+(3, 1, 1, 7, 1, NULL, NULL),
+(4, 1, 1, 10, 1, NULL, NULL),
+(5, 1, 1, 13, 1, NULL, NULL),
+(6, 1, 1, 26, 1, NULL, NULL),
+(7, 1, 1, 19, 1, NULL, NULL),
+(8, 1, 1, 22, 1, NULL, NULL),
+(9, 1, 1, 25, 1, NULL, NULL),
+(10, 1, 1, 28, 1, NULL, NULL),
+(11, 1, 1, 31, 1, NULL, NULL),
+(12, 1, 1, 34, 1, NULL, NULL),
+(13, 1, 1, 37, 1, NULL, NULL),
+(14, 1, 1, 40, 1, NULL, NULL),
+(15, 1, 1, 43, 1, NULL, NULL),
+(16, 1, 1, 46, 1, NULL, NULL),
+(17, 1, 1, 49, 1, NULL, NULL),
+(18, 1, 1, 52, 1, NULL, NULL),
+(19, 1, 1, 55, 1, NULL, NULL),
+(20, 1, 1, 58, 1, NULL, NULL),
+(21, 1, 1, 61, 1, NULL, NULL),
+(22, 1, 1, 64, 1, NULL, NULL),
+(23, 1, 1, 67, 1, NULL, NULL),
+(24, 1, 1, 70, 1, NULL, NULL),
+(25, 1, 1, 73, 1, NULL, NULL),
+(26, 1, 1, 76, 1, NULL, NULL),
+(27, 1, 1, 79, 1, NULL, NULL);
+
+INSERT INTO `privilege_sections` (`id`, `section_code`, `section_name`) VALUES
+(1, 'TRSQTNEW', 'Tours/Quotations/newQuotation'),
+(2, 'TRQTALL', 'Tours/Quotations/AllQuotation'),
+(3, 'MFHTHTS', 'MasterFiles/Hotel/Hotels'),
+(4, 'MFHTPAX', 'MasterFiles/Hotel/HotelPackages'),
+(5, 'MFHTGRP', 'MasterFile/Hotel/HotelGroups'),
+(6, 'MFHTCMPS', 'MasterFiles/Hotel/CompulsorySupliments'),
+(7, 'MFTRVHS', 'MasterFiles/Tranpoart/Vehicles'),
+(8, 'MFTRVTP', 'MasterFiles/Tranpoart/VehicleType'),
+(9, 'MFTRDRV', 'MasterFiles/Tranpoart/Drivers'),
+(10, 'MFMISMISS', 'MasterFiles/Miscellaneous/Miscellaneous'),
+(11, 'MFMISMCAT', 'MasterFiles/Miscellaneous/MiscellaneousCategory'),
+(12, 'MFGIDGIDS', 'MasterFiles/Guide/Guides'),
+(13, 'MFGIDLAN', 'MasterFiles/Guide/Language'),
+(14, 'MFGIDRM', 'MasterFiles/Guide/Rooms'),
+(15, 'MFGIDDFEE', 'MasterFiles/Guide/Fee'),
+(16, 'MFLOCCNTR', 'MasterFiles/Locations/Countries'),
+(17, 'MFLOCDIS', 'MasterFiles/LocationsDistricts '),
+(18, 'MFLOCCTY', 'MasterFiles/Locations/City'),
+(19, 'MFRTLOC', 'MasterFiles/Routes/Locatios '),
+(20, 'MFLOCDIS', 'MasterFiles/Locatios/Distance'),
+(21, 'MFLOCSS', 'MasterFiles/Locations/SiteSeen'),
+(22, 'MFITNRY', 'MasterFiles/Itineray'),
+(23, 'MFMDMKT', 'MasterFiles/MasterData/Market'),
+(24, 'MFMDAGNT', 'MasterFiles/MasterData/Agent'),
+(25, 'MFMDCRNCY', 'MasterFiles/MasterData/Currency'),
+(26, 'MFMDBRNCH', 'MasterFiles/MasterData/Branches'),
+(27, 'MFMDTAX', 'MasterFiles/MasterData/Tax');
+
+--
+-- Dumping data for table `user_types`
+--
+
+INSERT INTO `user_types` (`id`, `user_type`) VALUES
+(1, 'Admin'),
+(2, 'User'),
+(3, 'Guest');
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

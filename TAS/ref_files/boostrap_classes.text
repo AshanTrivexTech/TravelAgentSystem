@@ -1,0 +1,74 @@
+
+-----------------------------TABLE CLASS--------------------------------------------
+Table class name = "table table-bordered table-hover table-checkable"
+
+=============================Search Select Class===================================================
+
+<select  class="form-control m-bootstrap-select m_selectpicker" data-live-search="true">
+
+===============================================================================
+
+
+
+
+
+
+
+    $(".success").click(function(){
+
+        $.bootstrapGrowl('We do have the Kapua suite available.',{
+
+            type: 'success',
+
+            delay: 2000,
+
+        });
+
+    });
+
+
+    $(".error").click(function(){
+
+        $.bootstrapGrowl('You Got Error',{
+
+            type: 'danger',
+
+            delay: 2000,
+
+        });
+
+    });
+
+
+    $(".info").click(function(){
+
+        $.bootstrapGrowl('It is for your kind information',{
+
+            type: 'info',
+
+            delay: 2000,
+
+        });
+
+    });
+
+
+    $(".warning").click(function(){
+
+        $.bootstrapGrowl('It is for your kind warning',{
+
+            type: 'warning',
+
+            delay: 2000,
+
+        });
+
+    });
+
+
+
+    //---------------------DatePicker
+    <input placeholder="Insurance Expire Date" id="m_datepicker_2_modal"
+                                               name="ins_exDate" type="text"
+                                               class="form-control dtpic-format" value="">
+
