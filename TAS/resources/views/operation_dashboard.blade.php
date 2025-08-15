@@ -1,4 +1,4 @@
-@extends('layouts.tas_app') 
+@extends('layouts.tas_app')
 @section('content')
 <meta name="_token" content="{{csrf_token()}}" />
   <style>
@@ -56,11 +56,11 @@
             <h3 class="m-subheader__title m-subheader__title--separator ">
                         OPERATIONS
                 </h3>
-            
+
         </div>
         <div>
             <div class="col-xl-4 order-1 order-xl-2 m--align-right">
-                
+
                 <div class="m-separator m-separator--dashed d-xl-none"></div>
             </div>
         </div>
@@ -81,12 +81,12 @@
                                                 <i class="m-menu__link-icon flaticon-file text-success "></i> --}}
                                                 {{-- <hr>
                                                 <h6 class="card-subtitle mb-2 text-muted text-success">12</h6>	 --}}
-{{--                                                                             
+{{--
                                         </div>
                                     </div>
-                                                                
+
                                         </a>   --}}
-                
+
                         <a href="{{Route('quotation_create')}}"  class="m-portlet btn">
                                         <div class="m-portlet__body" style="padding:5px;">
                                             <div class="m-widget26">
@@ -94,12 +94,12 @@
                                                     <i class="m-menu__link-icon flaticon-file text-accent" ></i>
                                                     {{-- <hr> --}}
                                                     {{-- <h6 class="card-subtitle mb-2 text-muted text-accent">12</h6>	 --}}
-                                                                                
+
                                             </div>
                                         </div>
-                                                                    
-                                            </a>  
-                    
+
+                                            </a>
+
                             <a href="{{Route('quotation_index')}}"  class="m-portlet btn">
                                             <div class="m-portlet__body" style="padding:5px;">
                                                 <div class="m-widget26">
@@ -107,12 +107,12 @@
                                                         <i class="m-menu__link-icon flaticon-file text-info" ></i>
                                                         {{-- <hr> --}}
                                                         {{-- <h6 class="card-subtitle mb-2 text-muted text-info">12</h6>	 --}}
-                                                                                    
+
                                                 </div>
                                             </div>
-                                                                        
-                                                </a>  
-                                                        
+
+                                                </a>
+
         </div>
         </div>
     </div>
@@ -122,7 +122,7 @@
                             <h5 >Bookings</h5>
                     </div>
         <div class="block" style="padding-left:50px;">
-                
+
                     <a href="{{Route('tour_booking_index')}}"  class="m-portlet btn">
                                     <div class="m-portlet__body" style="padding:5px;">
                                         <div class="m-widget26">
@@ -130,12 +130,12 @@
                                                 <i class="m-menu__link-icon flaticon-list text-danger" ></i>
                                                 {{-- <hr> --}}
                                                 {{-- <h6 class="card-subtitle mb-2 text-muted text-danger">12</h6>	 --}}
-                                                                            
+
                                         </div>
                                     </div>
-                                                                
-                                        </a>  
-                
+
+                                        </a>
+
                         <a href="{{ Route('manage_confirm') }}"  class="m-portlet btn">
                                         <div class="m-portlet__body" style="padding:5px;">
                                             <div class="m-widget26">
@@ -143,37 +143,37 @@
                                                     <i class="m-menu__link-icon flaticon-list text-warning" ></i>
                                                     {{-- <hr> --}}
                                                     {{-- <h6 class="card-subtitle mb-2 text-muted text-warning">12</h6>	 --}}
-                                                                                
+
                                             </div>
                                         </div>
-                                                                    
-                                            </a>  
-                    
-                            <a href=""  class="m-portlet btn">
-                                            <div class="m-portlet__body" style="padding:5px;">
-                                                <div class="m-widget26">
-                                                        <h6 class="card-title text-center text-info">Closed<br>Bookings</h6>
-                                                        <i class="m-menu__link-icon flaticon-list text-info" ></i>
-                                                        {{-- <hr> --}}
-                                                        {{-- <h6 class="card-subtitle mb-2 text-muted text-info">12</h6>	 --}}
-                                                                                    
-                                                </div>
-                                            </div>
-                                                                        
-                                                </a>  
-                        
-                                <a href=""  class="m-portlet btn">
-                                                <div class="m-portlet__body" style="padding:5px;">
-                                                    <div class="m-widget26">
-                                                            <h6 class="card-title text-center text-accent" >Canceled<br>Bookings</h6>
-                                                            <i class="m-menu__link-icon flaticon-list text-accent" ></i>
-                                                            {{-- <hr> --}}
-                                                            {{-- <h6 class="card-subtitle mb-2 text-muted text-accent">12</h6>	 --}}                           
-                                                    </div>
-                                                </div>
-                                                                            
-                                                    </a>  
-                                                         
+
+                                            </a>
+
+{{--                            <a href=""  class="m-portlet btn">--}}
+{{--                                            <div class="m-portlet__body" style="padding:5px;">--}}
+{{--                                                <div class="m-widget26">--}}
+{{--                                                        <h6 class="card-title text-center text-info">Closed<br>Bookings</h6>--}}
+{{--                                                        <i class="m-menu__link-icon flaticon-list text-info" ></i>--}}
+{{--                                                        --}}{{-- <hr> --}}
+{{--                                                        --}}{{-- <h6 class="card-subtitle mb-2 text-muted text-info">12</h6>	 --}}
+{{--                                                                                    --}}
+{{--                                                </div>--}}
+{{--                                            </div>--}}
+{{--                                                                        --}}
+{{--                                                </a>  --}}
+{{--                        --}}
+{{--                                <a href=""  class="m-portlet btn">--}}
+{{--                                                <div class="m-portlet__body" style="padding:5px;">--}}
+{{--                                                    <div class="m-widget26">--}}
+{{--                                                            <h6 class="card-title text-center text-accent" >Canceled<br>Bookings</h6>--}}
+{{--                                                            <i class="m-menu__link-icon flaticon-list text-accent" ></i>--}}
+{{--                                                            --}}{{-- <hr> --}}
+{{--                                                            --}}{{-- <h6 class="card-subtitle mb-2 text-muted text-accent">12</h6>	 --}}{{--                           --}}
+{{--                                                    </div>--}}
+{{--                                                </div>--}}
+{{--                                                                            --}}
+{{--                                                    </a>  --}}
+
         </div>
             </div>
     </div>
@@ -183,7 +183,7 @@
                             <h5 >Transport</h5>
                     </div>
         <div class="block" style="padding-left:50px;">
-                
+
                     <a href="{{route('tourtransport_load')}}"  class="m-portlet btn">
                                     <div class="m-portlet__body" style="padding:5px;">
                                         <div class="m-widget26">
@@ -191,14 +191,14 @@
                                                 <i class="m-menu__link-icon flaticon-car text-info" ></i>
                                                 {{-- <hr> --}}
                                                 {{-- <h6 class="card-subtitle mb-2 text-muted text-danger">12</h6>	 --}}
-                                                                            
+
                                         </div>
                                     </div>
-                                                                
-                                        </a>                                 
+
+                                        </a>
         </div>
             </div>
     </div>
-    
+
 </div>
 @endsection
