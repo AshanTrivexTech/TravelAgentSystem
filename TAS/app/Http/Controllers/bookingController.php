@@ -2677,7 +2677,7 @@ $tourQoutGuide_gp =$tourQoutGuide->groupBy('tour_day');
     $pdf = PDF::loadView('booking_section.confirm.TourQuatationPdf', $data);
 
     // Define PDF file name
-    $fileName = 'quotation_' . $id . '.pdf';
+    $fileName = 'Tour Quotation_' . $id . '.pdf';
 
     // Stream or download the PDF
     return $pdf->download($fileName);
