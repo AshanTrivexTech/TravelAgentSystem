@@ -2,9 +2,9 @@
 <div class="m-stack__item m-brand  m-brand--skin-dark ">
 		<div class="m-stack m-stack--ver m-stack--general">
 			<div class="m-stack__item m-stack__item--middle m-brand__logo">
-				
+
 				{{-- <a href="index.html" class="m-brand__logo-wrapper"> --}}
-						<h1 style="color:white;"> T A S </h1>
+						<h1 style="color:white;"> TrivexTech Pvt Ltd </h1>
 					{{-- <img alt="" src="assets/demo/default/media/img/logo/logo_default_dark.png" /> --}}
 				{{-- </a> --}}
 			</div>

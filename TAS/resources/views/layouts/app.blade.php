@@ -5,7 +5,7 @@
 	<!-- begin::Head -->
 	<head>
 		<meta charset="utf-8" />
-		<title>DMC - Login</title>
+		<title>Travel Agent Login</title>
 		<meta name="description" content="Latest updates and statistic charts">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
 
@@ -42,14 +42,14 @@
 	<body class="m--skin- m-header--fixed m-header--fixed-mobile m-aside-left--enabled m-aside-left--skin-dark m-aside-left--fixed m-aside-left--offcanvas m-footer--push m-aside--offcanvas-default">
 
         <!-- begin:: Page -->
-        
-        
-        <main>  
+
+
+        <main>
 
 						@yield('content')
-					
+
 				</main>
-      
+
 
 		<!--begin::Base Scripts -->
     <script src="{{URL::asset('assets/vendors/base/vendors.bundle.js')}}" type="text/javascript"></script>

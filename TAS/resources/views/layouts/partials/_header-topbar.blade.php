@@ -6,7 +6,7 @@
 <!--[html-partial:include:{"file":"partials\/_topbar-notifications.html"}]/-->
 <!--[html-partial:include:{"file":"partials\/_topbar-quick-actions.html"}]/-->
 			@include('layouts.partials._topbar-user-profile')
-			
+
 			<li id="m_quick_sidebar_toggle" class="m-nav__item">
 					<a href="#" class="m-nav__link m-dropdown__toggle">
 						<span class="m-nav__link-icon">

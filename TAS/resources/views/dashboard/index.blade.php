@@ -7,26 +7,26 @@
 				<h3 class="m-subheader__title ">
 				 Dashboard
 				</h3>
-			</div>    
+			</div>
 			<div>
-				<span class="m-subheader__daterange" id="m_dashboard_daterangepicker">
-					<span class="m-subheader__daterange-label">
-						<span class="m-subheader__daterange-title"></span>
-						<span class="m-subheader__daterange-date m--font-brand"></span>
-					</span>
-					<a href="#" class="btn btn-sm btn-brand m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill">
-						<i class="la la-angle-down"></i>
-					</a>
-				</span>
+{{--				<span class="m-subheader__daterange" id="m_dashboard_daterangepicker">--}}
+{{--					<span class="m-subheader__daterange-label">--}}
+{{--						<span class="m-subheader__daterange-title"></span>--}}
+{{--						<span class="m-subheader__daterange-date m--font-brand"></span>--}}
+{{--					</span>--}}
+{{--					<a href="#" class="btn btn-sm btn-brand m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill">--}}
+{{--						<i class="la la-angle-down"></i>--}}
+{{--					</a>--}}
+{{--				</span>--}}
 			</div>
 		</div>
-    </div>    
+    </div>
     <!-- END: Subheader -->
-    
+
     <div id="dboard" class="m-content">
      <div class="row">
 
-        
+
 
            <div class="col-xl-12">
             <div class="m-portlet">
@@ -47,13 +47,13 @@
                                         <span id="tot_quotes" class="m-widget24__stats m--font-brand">
                                             0
                                         </span>
-                                       
+
                                         <div class="m-widget16" style="padding-left:28px;padding-right:28px;padding-bottom:20px;">
                                                         <div class="row">
                                                             <div class="col-md-12">
-                                                               
+
                                                                 <div class="m-widget16__body">
-            
+
                                                                     <!--begin::widget item-->
                                                                     <div class="m-widget16__item">
                                                                         <span class="m-widget16__date">
@@ -63,9 +63,9 @@
                                                                             0
                                                                         </span>
                                                                     </div>
-            
+
                                                                     <!--end::widget item-->
-            
+
                                                                     <!--begin::widget item-->
                                                                     <div class="m-widget16__item">
                                                                         <span class="m-widget16__date">
@@ -75,9 +75,9 @@
                                                                            0
                                                                         </span>
                                                                     </div>
-            
+
                                                                     <!--end::widget item-->
-            
+
                                                                     <!--begin::widget item-->
                                                                     <div class="m-widget16__item">
                                                                         <span class="m-widget16__date">
@@ -87,9 +87,9 @@
                                                                             0
                                                                         </span>
                                                                     </div>
-            
+
                                                                     <!--end::widget item-->
-            
+
                                                                     <!--begin::widget item-->
                                                                     <div class="m-widget16__item">
                                                                         <span class="m-widget16__date">
@@ -98,13 +98,13 @@
                                                                         <span id="tot_quotes_cf" class="m-widget16__price m--align-right m--font-brand">
                                                                             0
                                                                         </span>
-                                                                    </div>                                                                         
+                                                                    </div>
                                                                 </div>
-                                                            </div>                                                           
+                                                            </div>
                                                         </div>
                                                     </div>
-                                        
-                                        
+
+
                                     </div>
                                 </div>
 
@@ -125,12 +125,12 @@
                                         <span class="m-widget24__stats m--font-info">
                                             0
                                         </span>
-                                        
+
                                         <div class="m-widget16" style="padding-left:28px;padding-right:28px;padding-bottom:20px;">
                                                 <div class="row">
-                                                    <div class="col-md-12">                                                        
+                                                    <div class="col-md-12">
                                                         <div class="m-widget16__body">
-    
+
                                                             <!--begin::widget item-->
                                                             <div class="m-widget16__item">
                                                                 <span class="m-widget16__date">
@@ -140,9 +140,9 @@
                                                                     0
                                                                 </span>
                                                             </div>
-    
+
                                                             <!--end::widget item-->
-    
+
                                                             <!--begin::widget item-->
                                                             <div class="m-widget16__item">
                                                                 <span class="m-widget16__date">
@@ -152,9 +152,9 @@
                                                                    0
                                                                 </span>
                                                             </div>
-    
+
                                                             <!--end::widget item-->
-    
+
                                                             <!--begin::widget item-->
                                                             <div class="m-widget16__item">
                                                                 <span class="m-widget16__date">
@@ -164,9 +164,9 @@
                                                                     0
                                                                 </span>
                                                             </div>
-    
+
                                                             <!--end::widget item-->
-    
+
                                                             <!--begin::widget item-->
                                                             <div class="m-widget16__item">
                                                                 <span class="m-widget16__date">
@@ -175,12 +175,12 @@
                                                                 <span class="m-widget16__price m--align-right m--font-brand">
                                                                     0
                                                                 </span>
-                                                            </div>                                                                         
+                                                            </div>
                                                         </div>
-                                                    </div>                                                           
+                                                    </div>
                                                 </div>
                                         </div>
-                                        
+
                                     </div>
                                 </div>
 
@@ -196,16 +196,16 @@
                                         </h4>
                                         <br>
                                         <span class="m-widget24__desc">
-                                            Total 
+                                            Total
                                         </span>
                                         <span class="m-widget24__stats m--font-danger">
                                             0
                                         </span>
                                         <div class="m-widget16" style="padding-left:28px;padding-right:28px;padding-bottom:20px;">
                                                 <div class="row">
-                                                    <div class="col-md-12">                                                        
+                                                    <div class="col-md-12">
                                                         <div class="m-widget16__body">
-    
+
                                                             <!--begin::widget item-->
                                                             <div class="m-widget16__item">
                                                                 <span class="m-widget16__date">
@@ -215,9 +215,9 @@
                                                                     0
                                                                 </span>
                                                             </div>
-    
+
                                                             <!--end::widget item-->
-    
+
                                                             <!--begin::widget item-->
                                                             <div class="m-widget16__item">
                                                                 <span class="m-widget16__date">
@@ -227,9 +227,9 @@
                                                                    0
                                                                 </span>
                                                             </div>
-    
+
                                                             <!--end::widget item-->
-    
+
                                                             <!--begin::widget item-->
                                                             <div class="m-widget16__item">
                                                                 <span class="m-widget16__date">
@@ -239,9 +239,9 @@
                                                                     0
                                                                 </span>
                                                             </div>
-    
+
                                                             <!--end::widget item-->
-    
+
                                                             <!--begin::widget item-->
                                                             <div class="m-widget16__item">
                                                                 <span class="m-widget16__date">
@@ -250,16 +250,16 @@
                                                                 <span class="m-widget16__price m--align-right m--font-brand">
                                                                     0
                                                                 </span>
-                                                            </div>                                                                         
+                                                            </div>
                                                         </div>
-                                                    </div>                                                           
+                                                    </div>
                                                 </div>
                                         </div>
                                     </div>
                                 </div>
 
                                 <!--end::New Orders-->
-                            </div>                           
+                            </div>
                         </div>
                     </div>
             </div>
@@ -285,7 +285,7 @@
 
                                             <div class="m-dropdown__wrapper" style="z-index: 101;">
                                                 <span class="m-dropdown__arrow m-dropdown__arrow--right m-dropdown__arrow--adjust" style="left: auto; right: 21.5px;"></span>
-                                               
+
                                             </div>
                                         </li>
                                     </ul>
@@ -400,7 +400,7 @@
                             <div class="m-portlet__body m-portlet__body--no-padding">
                                 <div class="row m-row--no-padding m-row--col-separator-xl">
                                     <div class="col-md-12 col-lg-12 col-xl-4">
-            
+
                                         <!--begin:: Widgets/Stats2-1 -->
                                         <div class="m-widget1">
                                             <div class="m-widget1__item">
@@ -437,11 +437,11 @@
                                                 </div>
                                             </div>
                                         </div>
-            
+
                                         <!--end:: Widgets/Stats2-1 -->
                                     </div>
                                     <div class="col-md-12 col-lg-12 col-xl-4">
-            
+
                                         <!--begin:: Widgets/Stats2-2 -->
                                         <div class="m-widget1">
                                             <div class="m-widget1__item">
@@ -478,11 +478,11 @@
                                                 </div>
                                             </div>
                                         </div>
-            
+
                                         <!--begin:: Widgets/Stats2-2 -->
                                     </div>
                                     <div class="col-md-12 col-lg-12 col-xl-4">
-            
+
                                         <!--begin:: Widgets/Stats2-3 -->
                                         <div class="m-widget1">
                                             <div class="m-widget1__item">
@@ -519,7 +519,7 @@
                                                 </div>
                                             </div>
                                         </div>
-            
+
                                         <!--begin:: Widgets/Stats2-3 -->
                                     </div>
                                 </div>
@@ -527,7 +527,7 @@
                         </div>
                     </div>
         </div>
-        
+
             <div class="row">
 
                 <div class="col-xl-6">
@@ -546,12 +546,12 @@
                                                 <div class="m-portlet__nav-link m-portlet__nav-link--icon m-portlet__nav-link--icon-xl">
                                                     <i class="fa fa-volume-up m--font-brand"></i>
                                                 </div>
-                                                
+
                                             </li>
                                         </ul>
                                     </div>
                                 </div>
-                                
+
                                 <div class="m-portlet__body">
                                     <div class="m-widget3">
                                             @foreach($annoucements->all() as $annoucement)
@@ -580,11 +580,11 @@
                                                     @endif
                                             </div>
                                             <div class="m-widget3__body">
-                                               
+
                                                 <p class="m-widget3__text">
-                                                    
+
                                                     {{$annoucement->message}}
-                                                    
+
                                                 </p>
                                             </div>
                                         </div>
@@ -639,11 +639,11 @@
                                         </div> --}}
                                     </div>
                                 </div>
-                                
+
                             </div>
                 </div>
                 <div class="col-xl-6 col-lg-12">
-                    
+
                         <div class="m-portlet m-portlet--full-height ">
                                 <div class="m-portlet__head">
                                     <div class="m-portlet__head-caption">
@@ -892,7 +892,7 @@
 
                 </div>
                 {{-- <div class="col-md-8">
-            
+
                     <div class="m-portlet">
                     <div class="m-portlet__body m-portlet__body--no-padding">
                         <div class="row m-row--no-padding m-row--col-separator-xl">
@@ -1024,11 +1024,11 @@
                 </div>
                 </div> --}}
             </div>
-            
+
             {{-- <button type="button" onclick="load_dashbord_data()">Req</button> --}}
-    </div>    
-    
+    </div>
+
     @include('dashboard.dashbord_js')
 
-@endsection     
+@endsection
 

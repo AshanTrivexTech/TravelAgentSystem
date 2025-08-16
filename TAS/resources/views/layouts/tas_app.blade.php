@@ -4,86 +4,86 @@
 	<head>
 		<meta charset="utf-8" />
 		<title>@if(isset($title)) {{$title}} @else {{'Travel Mate'}}@endif</title>
-		<meta name="description" content="TAS by Wysheit">
+		<meta name="description" content="Travel Agent">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		{{--  <meta id="csrf-token" name="csrf-token" content="{{ csrf_token() }}">   --}}
 		<meta name="_token" content="{{csrf_token()}}" />
 		<!--begin::Web font -->
 		<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>
-		
+
 		<script>
-			          WebFont.load({ 
+			          WebFont.load({
 						  google: {"families":["Poppins:300,400,500,600,700","Roboto:300,400,500,600,700"]},
-						  active: function() {  
-							  sessionStorage.fonts = true; 
-							  } 
-						}); 
-						
-		    
-						
-		</script>  
-		<!--end::Web font -->  
-						
+						  active: function() {
+							  sessionStorage.fonts = true;
+							  }
+						});
+
+
+
+		</script>
+		<!--end::Web font -->
+
 		<script>
         window.Laravel =  <?php echo json_encode([
             'csrfToken' => csrf_token(),
-        ]); ?> 
+        ]); ?>
         /*custom*/
-	 
+
         var image_upload_route = "route('upload-post')";
         var image_delete_route = "route('upload-remove')";
 	</script>
-	
+
 
 		<!-- vue js -->
 
 	<!-- <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> -->
 
-		<!--begin::Base Styles -->                           
+		<!--begin::Base Styles -->
 		<!--begin::Page Vendors -->
 		<!--end::Page Vendors -->
 		<link href="{{ URL::asset('assets/vendors/base/vendors.bundle.css') }}" rel="stylesheet" type="text/css" />
-		<link href="{{ URL::asset('assets/demo/default/base/style.bundle.css') }}" rel="stylesheet" type="text/css" />		
-		
+		<link href="{{ URL::asset('assets/demo/default/base/style.bundle.css') }}" rel="stylesheet" type="text/css" />
+
 		<!--end::Base Styles -->
 		@section('Page_Styles')
-	   @show 
+	   @show
 		<link rel="shortcut icon" href="{{ URL::asset('assets/demo/default/media/img/logo/favicon.ico') }}" />
-		 
+
 
 
 
 	</head>
 	<!-- end::Head -->        <!-- end::Body -->
 	<body class="m-page--fluid m--skin- m-page--loading-enabled m-page--loading m-content--skin-light2 m-header--fixed m-header--fixed-mobile m-aside-left--enabled m-aside-left--skin-dark m-aside-left--fixed m-aside-left--offcanvas m-footer--push m-aside--offcanvas-default m-brand--minimize m-aside-left--minimize"  >
-			
-	
 
 
-		@include('layouts.partials._loader-base') 
+
+
+		@include('layouts.partials._loader-base')
 		@include('layouts._layout')
 		@include('layouts.partials.quick_sidebar_toggle')
-		
+
 		@section('Page_Scripts')
 		<!--begin::Base Scripts -->
-		
+
 		<script src="{{ URL::asset('assets/vendors/base/vendors.bundle.js') }}" type="text/javascript"></script>
 		<script src="{{ URL::asset('assets/demo/default/base/scripts.bundle.js') }}" type="text/javascript"></script>
 		<script src="{{ URL::asset('assets/demo/default/custom/components/forms/widgets/select2.js') }}" type="text/javascript"></script>
 	    <script src="{{ URL::asset('assets/demo/default/custom/components/forms/widgets/bootstrap-select.js') }}" type="text/javascript"></script>
-		
-		
-		<!--end::Base Scripts -->   
-		
-		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script> 
-		
+
+
+		<!--end::Base Scripts -->
+
+		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
 <script>
 
     @if(Session::has('message'))
-			
+
         var type="{{Session::get('alert-type','info')}}"
-			
+
         switch(type){
             case 'info':
                  toastr.info("{{ Session::get('message') }}");
@@ -98,13 +98,13 @@
                 toastr.error("{{ Session::get('message') }}");
                 break;
         }
-		
-		@php		
+
+		@php
 		session()->forget('alert-type');
 		session()->forget('message');
 		@endphp
 	@endif
-	
+
 </script>
 
 	<script>
@@ -121,12 +121,12 @@
 			// autocomplete="off"
 			// $('input[type="text"]').attr('autocomplete','off');
 			// $('input[type="hidden"]').attr('autocomplete','off');
-			
+
 
 			$(function(){
 					$('input[name="number"]').bind('keypress', function(e){
 						var keyCode = (e.which)?e.which:event.keyCode
-						return !(keyCode>31 && (keyCode<48 || keyCode>57)); 
+						return !(keyCode>31 && (keyCode<48 || keyCode>57));
 					});
 			});
 
@@ -135,7 +135,7 @@
 				// Allow: backspace, delete, tab, escape, enter and .
 				if ($.inArray(e.keyCode, [46, 8, 9, 27, 13]) !== -1 ||
 					 // Allow: Ctrl+A, Command+A
-					(e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) || 
+					(e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) ||
 					 // Allow: home, end, left, right, down, up
 					(e.keyCode >= 35 && e.keyCode <= 40)) {
 						 // let it happen, don't do anything
@@ -151,7 +151,7 @@
 				// Allow: backspace, delete, tab, escape, enter and .
 				if ($.inArray(e.keyCode, [46, 8, 9, 27, 13]) !== -1 ||
 					 // Allow: Ctrl+A, Command+A
-					(e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) || 
+					(e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) ||
 					 // Allow: home, end, left, right, down, up
 					(e.keyCode >= 35 && e.keyCode <= 40)) {
 						 // let it happen, don't do anything
@@ -167,7 +167,7 @@
 				// Allow: backspace, delete, tab, escape, enter and .
 				if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110]) !== -1 ||
 					 // Allow: Ctrl+A, Command+A
-					(e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) || 
+					(e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) ||
 					 // Allow: home, end, left, right, down, up
 					(e.keyCode >= 35 && e.keyCode <= 40)) {
 						 // let it happen, don't do anything
@@ -177,10 +177,10 @@
 				if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
 					e.preventDefault();
 				}
-			});	
+			});
 
 
-		
+
 	});
 </script>
 
@@ -205,33 +205,33 @@
 		       	console.log(msg);
 		    }, 10);
 		});
-	</script> 
+	</script>
 
 
-@endif   
+@endif
 
 
 
 
 
-		@show 
-		
+		@show
+
 		@section('form_Scripts')
-		@show 
+		@show
 		@section('hotel_Scripts')
-		@show		
+		@show
 		@section('transport_Scripts')
-		@show	
+		@show
 		@section('miscellaneous_Scripts')
-		@show	
+		@show
 		@section('directions_Scripts')
 		@show
-		@section('Guest_Scripts')	
+		@section('Guest_Scripts')
 		@show
-	
-	
+
+
 		<script src="{{URL::asset('assets/demo/default/custom/components/base/bootstrap-notify.js') }}" type="text/javascript"></script>
-		
+
 		<script src="{{URL::asset('assets/alert/sweetalert.min.js')}}"></script>
 		<script src="{{ URL::asset('assets/demo/default/custom/crud/forms/widgets/select2.js') }}" type="text/javascript"></script>
 
@@ -239,10 +239,10 @@
 
 		<script>
 				$(".dtpic-format").datepicker({format: 'yyyy-mm-dd'});
-        
-				$(window).on('load', function() { 
-							$('body').removeClass('m-page--loading'); 
-				});        
+
+				$(window).on('load', function() {
+							$('body').removeClass('m-page--loading');
+				});
 		</script>
 		<!-- end::Page Loader -->
 
