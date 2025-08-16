@@ -6,20 +6,20 @@
             <div class="m-grid__item m-grid__item--fluid	m-login__wrapper">
                 <div class="m-login__container">
                     <div style="text-align: center;" class="m-login__logo" >
-                       
-                        <img width="45%" src="{{URL::asset('assets/app/media/img/logos/logo1.png')}}">
-                        
+
+{{--                        <img width="45%" src="{{URL::asset('assets/app/media/img/logos/logo1.png')}}">--}}
+
                     </div>
                     <div class="m-login__signin">
                         <div class="m-login__head">
-                            <h3 class="m-login__title">Sign In To Travel Mate</h3>
+                            <h3 class="m-login__title">Sign In To Trivex Travel System</h3>
                         </div>
                         <form method="POST"   action="{{ route('login') }}"  class="m-login__form m-form" aria-label="{{ __('Login') }}">
                             {{csrf_field()}}
                             <div class="form-group m-form__group">
-                                
+
                         <input id="email" placeholder="Email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required autofocus>
-                                
+
                         @if ($errors->has('email'))
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $errors->first('email') }}</strong>
@@ -27,7 +27,7 @@
                          @endif
                             </div>
                             <div class="form-group m-form__group">
-                                
+
                               <input id="password" type="password" placeholder="Password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
                               @if ($errors->has('password'))
                               <span class="invalid-feedback" role="alert">
@@ -57,9 +57,9 @@
                             </div>
                         </form>
                     </div>
-                    
-                    
-                    
+
+
+
                     <div class="m-login__account">
                         <span class="m-login__account-msg">
                             Don't have an account yet ?

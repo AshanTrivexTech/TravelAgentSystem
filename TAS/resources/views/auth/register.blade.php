@@ -7,7 +7,7 @@
                         <div class="m-login__container">
                                 <div class="m-login__logo">
                                         <a href="">
-                                        <img width="45%" src="{{URL::asset('assets/app/media/img//logos/logo1.png')}}">
+{{--                                        <img width="45%" src="{{URL::asset('assets/app/media/img//logos/logo1.png')}}">--}}
                                         </a>
                                     </div>
     <div class="m-login__head">
@@ -17,7 +17,7 @@
     <form class="m-login__form m-form" id="aak" method="POST" action="{{ route('register') }}" aria-label="{{ __('Register') }}">
             @csrf
         <div class="form-group m-form__group">
-           
+
                 <input id="name" type="text" placeholder="Full Name" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" name="name" value="{{ old('name') }}" required autofocus>
 
                 @if ($errors->has('name'))
@@ -27,7 +27,7 @@
                 @endif
         </div>
         <div class="form-group m-form__group">
-           
+
                 <input id="email" type="email" placeholder="Email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required>
 
                 @if ($errors->has('email'))
@@ -37,8 +37,8 @@
                 @endif
         </div>
         <div class="form-group m-form__group">
-   
-          
+
+
                 <input id="password" type="password" placeholder="Password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
 
                 @if ($errors->has('password'))
@@ -48,9 +48,9 @@
                 @endif
         </div>
         <div class="form-group m-form__group">
-               
+
                         <input id="password-confirm"  placeholder="Confirm Password" type="password" class="form-control" name="password_confirmation" required>
-                 
+
         </div>
         <div class="row form-group m-form__group m-login__form-sub">
             <div class="col m--align-left">
@@ -63,17 +63,17 @@
             </div>
         </div>
         <div class="m-login__form-action">
-            
+
             <button type="submit" class="btn btn-focus m-btn m-btn--pill m-btn--custom m-btn--air  m-login__btn">
                     {{ __('Register') }}
           </button>
-         
+
         <a href="{{route('login')}}"> <button type="button"  class="btn btn-outline-focus m-btn m-btn--pill m-btn--custom  m-login__btn">Cancel</button> </a>
         </div>
     </form>
                         </div>
                     </div>
                 </div>
-        </div>  
+        </div>
 </div>
 @endsection
